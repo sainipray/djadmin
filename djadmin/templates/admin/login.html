@@ -1,0 +1,105 @@
+{% extends "registration/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}
+    {{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }}login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block header-align %}center{% endblock %}
+{% block content %}
+    {% if form.errors and not form.non_field_errors %}
+        <p class="errornote">
+            {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}
+                {% trans "Please correct the errors below." %}{% endif %}
+        </p>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <div id="card-alert" class="card red margin">
+                <div class="card-content white-text">
+                    <p>{{ error }}</p>
+                </div>
+                <button type="button" class="close white-text" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div id="content-main">
+
+        {% if user.is_authenticated %}
+            <div id="card-alert" class="card red margin">
+                <div class="card-content white-text">
+                    <p>{% blocktrans with username=request.user.get_username trimmed %}
+                        You are authenticated as {{ username }}, but are not authorized to
+                        access this page. Would you like to login to a different account?
+                    {% endblocktrans %}</p>
+                </div>
+                <button type="button" class="close white-text" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        {% endif %}
+        <form action="{{ app_path }}" method="post">
+            <div class="row">{% csrf_token %}
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    {{ form.username.errors }}
+                    {{ form.username.label_tag }} {{ form.username }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    {{ form.password.errors }}
+                    {{ form.password.label_tag }} {{ form.password }}
+                    <input type="hidden" name="next" value="{{ next }}"/>
+                </div>
+            </div>
+            {% url 'admin_password_reset' as password_reset_url %}
+            {% if password_reset_url %}
+                <div class="password-reset-link">
+                    <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+                </div>
+            {% endif %}
+            <input id="latitude" type="hidden" value="" name="latitude">
+            <input id="longitude" type="hidden" value="" name="longitude">
+            <div class="row">
+                <div class="input-field col s12 center">
+                    <button class="btn {{ request.ADMIN_COLOR_THEME }} waves-effect waves-light " type="submit"
+                            name="action">{% trans 'Log in' %}<i class="mdi-content-send right"></i></button>
+                </div>
+                {% if request.ALLOW_FORGET_PASSWORD_ADMIN %}
+                <div class="input-field col s12 center">
+                    <a href="{% url 'password_reset' %}" class="cyan-text"
+                       name="action">Forgot password ?</a>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+
+        <script>
+            function showPosition(position) {
+                $("#latitude").val(position.coords.latitude);
+                $("#longitude").val(position.coords.longitude);
+            }
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+
+        </script>
+    </div>
+{% endblock %}

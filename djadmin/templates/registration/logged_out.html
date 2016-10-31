@@ -1,0 +1,21 @@
+{% extends "registration/base_site.html" %}
+{% load i18n %}
+{% block bodyclass %}{{ block.super }}login{% endblock %}
+
+
+{% block content %}
+    <div id="login-form">
+        <div id="card-alert" class="">
+            <div class="card-content center">
+                <span class="card-title darken-1">{% if title %}{{ title }}{% endif %}</span>
+
+                <p>{% trans "Thanks for spending some quality time with the Web site today." %}</p>
+            </div>
+            <div class="card-action darken-2 center">
+                <a href="{% url 'admin:index' %}"
+                   class="waves-effect waves-light red  btn white-text">{% trans 'Log in again' %}</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

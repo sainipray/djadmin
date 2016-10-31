@@ -1,0 +1,106 @@
+{% extends "admin/import_export/base.html" %}
+{% load i18n %}
+{% load admin_urls  material_form  %}
+{% load import_export_tags %}
+
+{% block breadcrumbs_last %}
+{% trans "Import" %}
+{% endblock %}
+{% block  navbar-fixed %} navbar-fixed{% endblock %}
+{% block content %}
+ <div class="card-panel">
+<h1>{% trans "Import" %}</h1>
+
+{% if confirm_form %}
+  <form action="{% url opts|admin_urlname:"process_import" %}" method="POST">
+    {% csrf_token %}
+    {{ confirm_form.as_p }}
+    <p>
+      {% trans "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'" %}
+    </p>
+    <div class="row">
+      <input type="submit" class="default" name="confirm" value="{% trans "Confirm import" %}">
+    </div>
+  </form>
+
+{% else %}
+  <form action="" method="post" id="{{ opts.module_name }}_form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <p>
+      {% trans "This importer will import the following fields: " %}
+        <br>
+      <code>{{ fields|join:", " }}</code>
+    </p>
+
+    <div class="module">
+    {% form form=form %}{% endform %}
+    </div>
+
+    <div class="row">
+      <button type="submit" class="default btn waves-effect waves-light {{ request.ADMIN_COLOR_THEME }}" value="{% trans "Submit" %}">{% trans "Submit" %}</button>
+    </div>
+  </form>
+{% endif %}
+
+{% if result %}
+
+  {% if result.has_errors %}
+    <h2>{% trans "Errors" %}</h2>
+    <ul>
+      {% for error in result.base_errors  %}
+      <li>
+        {{ error.error }}
+        <div class="traceback">{{ error.traceback|linebreaks }}</div>
+      </li>
+      {% endfor %}
+      {% for line, errors in result.row_errors %}
+        {% for error in errors %}
+          <li>
+            {% trans "Line number" %}: {{ line }} - {{ error.error }}
+            <div><code>{{ error.row.values|join:", " }}</code></div>
+            <div class="traceback">{{ error.traceback|linebreaks }}</div>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  {% else %}
+
+  <h2>
+    {% trans "Preview" %}
+  </h2>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        {% for field in result.diff_headers %}
+          <th>{{ field }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    {% for row in result.rows %}
+    <tr>
+      <td>
+        {% if row.import_type == 'new' %}
+          {% trans "New" %}
+        {% elif row.import_type == 'skip' %}
+          {% trans "Skipped" %}
+        {% elif row.import_type == 'delete' %}
+          {% trans "Delete" %}
+        {% elif row.import_type == 'update' %}
+          {% trans "Update" %}
+        {% endif %}
+      </td>
+      {% for field in row.diff %}
+      <td>
+        {{ field }}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
+  {% endif %}
+    </div>
+{% endblock %}

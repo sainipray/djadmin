@@ -1,0 +1,36 @@
+{% load material_form material_form_internal i18n %}
+{% part bound_field.field %}<div class="row">
+    <div{% attrs bound_field 'group' %}
+        id="id_{{ bound_field.html_name }}_container"
+        class="input-field file-field col {% if bound_field.value %} s10 {% else %} s12 {% endif %}{% if field.required %} required{% endif %}{% if bound_field.errors %} has-error{% endif %}"
+   {% endattrs %}>
+        <div class="btn {{ request.ADMIN_COLOR_THEME }}">
+            {% part field prefix %}<span>{% trans 'File' %}</span>{% endpart %}
+            <input type="file" name="{{ bound_field.html_name }}"/>
+        </div>
+        {% part field suffix %}{% endpart %}{% part field control %}<div class="file-path-wrapper">
+            <input{% attrs bound_field 'widget' default field.widget.attrs %}
+                id="id_{{ bound_field.html_name }}"
+                type="text"
+                class="file-path"
+                placeholder="{{ bound_field.label }}"
+                {% if bound_field.value|is_initial_file %}value="{{ bound_field.value }}"{% endif %}
+            {% endattrs %}>
+        </div>
+
+        {% endpart %}
+        {% if field.help_text %}
+        <small class="help-block">{{ bound_field.help_text }}</small>
+        {% endif %}
+        {% endpart %}{% part field errors %}
+        {% if bound_field.errors %}
+            {% include  'material/field_errors.html' %}
+        {% endif %}{% endpart %}{{ hidden_initial }}
+    </div>
+    {% part field help_text %}
+        {% if bound_field.value %}
+        <div class=" col s2" style="padding: 0px;">
+            <img src="/media/{{ bound_field.value }}" class="responsive-img">
+        </div>
+        {% endif %}
+</div>{% endpart %}

@@ -1,0 +1,31 @@
+{% load i18n material_form %}
+<div class="actions">
+    <div class="row">
+        {% for field in action_form %}
+            {% if field.label %}
+                <div class="col l10 s10 m10">
+                    {{ field }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="col s2 m2 l2">
+            <button type="submit" class="btn waves-effect waves-light tooltip {{ request.ADMIN_COLOR_THEME }}" title="{% trans "Run the selected action" %}"
+                    name="index"
+                    value="{{ action_index|default:0 }}">{% trans "Go" %}</button>
+        </div>
+    </div>
+    <div class="l12">
+        {% if actions_selection_counter %}
+            <script type="text/javascript">var _actions_icnt = "{{ cl.result_list|length|default:"0" }}";</script>
+           <strong> <span class="action-counter" data-actions-icnt="{{ cl.result_list|length }}">{{ selection_note }}</span>
+            {% if cl.result_count != cl.result_list|length %}
+            <span class="all" style="display:none">{{ selection_note_all }}</span>
+            <span class="question" style="display:none">
+                <a href="javascript:;" title="{% trans "Click here to select the objects across all pages" %}">{% blocktrans with cl.result_count as total_count %}Select all {{ total_count }} {{ module_name }}{% endblocktrans %}</a>
+            </span>
+            <span class="clear"  style="display:none"><a href="javascript:;">{% trans "Clear selection" %}</a></span>
+            {% endif %}
+            </strong>
+        {% endif %}
+    </div>
+</div>

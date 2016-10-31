@@ -1,0 +1,9 @@
+{% extends "registration/base.html" %}
+
+{% block title %}DJWP admin{% endblock %}
+
+{% block branding %}
+<a class="brand-logo {% block header-align %}{% endblock %}" href="{% url 'admin:index' %}">{{ request.ADMIN_HEADER_TITLE }}</a>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

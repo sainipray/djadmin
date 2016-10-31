@@ -1,0 +1,90 @@
+{% load i18n admin_static staticfiles %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/materialize.min.css" %}{% endblock %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/custom.min.css" %}"/>
+    {% block extrastyle %}{% endblock %}
+    {% block extrahead %}{% endblock %}
+    <script src="{% static "admin/js/jquery-1.11.2.min.js" %}" type="text/javascript"></script>
+    {% block blockbots %}
+        <meta name="robots" content="NONE,NOARCHIVE"/>{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
+      data-admin-utc-offset="{% now "Z" %}">
+
+<!-- Container -->
+<div id="container" class="card">
+    {% if not is_popup %}
+        <header id="header" class="page-topbar {% block navbar-fixed %}{% endblock %}">
+            <nav class="{{ request.ADMIN_COLOR_THEME }}">
+                <div class="nav-wrapper">
+                    <div class="col s12">
+                        {% block branding %}{% endblock %}
+                        {% block usertools %}
+                            {% if has_permission %}
+                                <ul class="right hide-on-med-and-down">
+                                    {% block userlinks %}
+                                        {% if site_url %}
+                                            <li><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{{ site_url }}">{% trans 'View site' %}</a></li>
+                                        {% endif %}
+                                        {% if user.is_active and user.is_staff %}
+                                            {% url 'django-admindocs-docroot' as docsroot %}
+                                            {% if docsroot %}
+                                                <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if user.has_usable_password %}
+                                            <li>
+                                                <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
+                                            </li>
+                                        {% endif %}
+
+                                    {% endblock %}
+                                    </li>
+                                    <!-- Dropdown Trigger -->
+                                    <li><a class="dropdown-button" href="#!" data-beloworigin="true"
+                                           data-activates="dropdown1"> {% trans 'Welcome,' %} {% firstof user.get_short_name user.get_username|capfirst %}<i
+                                            class="mdi-navigation-arrow-drop-down right"></i></a>
+                                        <ul id="dropdown1" class="dropdown-content">
+                                            <li><a href="#!">Profile</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            {% endif %}
+                        {% endblock %}
+                        {% block nav-global %}{% endblock %}
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+    {% endif %}
+
+
+<div id="content" class="{% block coltype %}colM{% endblock %}">
+        {% block pretitle %}{% endblock %}
+         {% block content_title %}{% endblock %}
+        {% block content %}
+        {% block object-tools %}{% endblock %}
+        {{ content }}
+        {% endblock %}
+        {% block sidebar %}{% endblock %}
+        <br class="clear" />
+    </div>
+    {% block footer %}
+        <div id="footer">
+
+        </div>
+    {% endblock %}
+</div>
+<!-- END Container -->
+<script src="{% static "admin/js/materialize.min.js" %}" type="text/javascript"></script>
+<script src="{% static "admin/js/plugins.min.js" %}" type="text/javascript"></script>
+</body>
+</html>

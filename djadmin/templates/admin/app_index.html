@@ -1,0 +1,48 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
+
+{% if not is_popup %}
+    {% block breadcrumbs %}
+        <nav class="{{ request.ADMIN_COLOR_THEME }}">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                    {% for app in app_list %}
+                        &rsaquo; <a>{{ app.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </nav>
+    {% endblock %}
+{% endif %}
+{% block content %}
+    <div class="card-panel">
+
+        <ul class="collection with-header">
+            <li class="collection-header {{ request.ADMIN_COLOR_THEME }} white-text">
+                <h5>{{ title }}</h5>
+            </li>
+
+            {% for apps_model in app_list %}
+                {% for app in apps_model.models %}
+                    <li class="collection-item">
+                        <div><a href="{{ app.admin_url }}" class="{{ request.ADMIN_COLOR_THEME }}-text" >{{ app.name }}</a>
+                            <a href="{{ app.admin_url }}" class="secondary-content ">
+                                <i class="mdi-content-create red-text">Change</i>
+                            </a>
+                            {% if app.add_url %}
+                            <a href="{{ app.add_url }}" class="secondary-content teal-text">
+                                <i class="mdi-content-add green-text">Add</i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

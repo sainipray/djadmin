@@ -1,0 +1,2 @@
+recursive-include djadmin/templates *
+recursive-include djadmin/static *

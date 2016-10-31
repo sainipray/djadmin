@@ -1,0 +1,12 @@
+{% extends "admin/import_export/change_list.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+    <div class="card-panel">
+ <a href="export/{{ cl.get_query_string }}" class="historylink">
+        <blockquote><h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans "Export" %}</h5></blockquote>
+    </a>
+  {{ block.super }}
+    </div>
+{% endblock %}
+

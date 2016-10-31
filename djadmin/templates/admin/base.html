@@ -1,0 +1,250 @@
+{% load i18n admin_static staticfiles %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css"
+          href="{% block stylesheet %}{% static "admin/css/materialize.min.css" %}{% endblock %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/js/packages/perfect-scrollbar/perfect-scrollbar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/js/packages/tooltip/tooltipster.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/custom.min.css" %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+    <script src="{% static "admin/js/jquery-1.11.2.min.js" %}" type="text/javascript"></script>
+
+    {% block extrastyle %}{% endblock %}
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}
+        <meta name="robots" content="NONE,NOARCHIVE"/>{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
+      data-admin-utc-offset="{% now "Z" %}">
+
+<!-- Container -->
+<div id="container" class="card">
+    {% if not is_popup %}
+        <header id="header" class="page-topbar {% block navbar-fixed %}{% endblock %}">
+            <nav class="{{ request.ADMIN_COLOR_THEME }}">
+                <div class="nav-wrapper">
+                    <div class="col l11 offset-l1">
+                        {% block branding %}{% endblock %}
+                        {% block usertools %}
+                            {% if has_permission %}
+                                <ul class="right hide-on-med-and-down">
+                                    <!-- Dropdown Trigger -->
+                                    <li><a class="dropdown-button" href="#!" data-beloworigin="true"
+                                           data-activates="dropdown1"> {% trans 'Welcome,' %} {% firstof user.get_short_name user.get_username|capfirst %}<i
+                                            class="mdi-navigation-arrow-drop-down right"></i></a>
+                                        <ul id="dropdown1" class="dropdown-content">
+                                            {% block userlinks %}
+                                                {% if site_url %}
+                                                    <li><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{{ site_url }}">{% trans 'View site' %}</a></li>
+                                                {% endif %}
+                                                {% if user.is_active and user.is_staff %}
+                                                    {% url 'django-admindocs-docroot' as docsroot %}
+                                                    {% if docsroot %}
+                                                        <li><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{{ docsroot }}">{% trans 'Documentation' %}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if user.has_usable_password %}
+                                                    <li>
+                                                        <a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
+                                                    </li>
+                                                {% endif %}
+
+                                            {% endblock %}
+                                            <li class="divider"></li>
+                                            <li><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            {% endif %}
+                        {% endblock %}
+                        {% block nav-global %}{% endblock %}
+                    </div>
+                </div>
+            </nav>
+        </header>
+    {% endif %}
+
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+        <div id="content-main">
+
+            {% if available_apps %}
+                <!-- START MAIN -->
+                <div id="main">
+                    <!-- START WRAPPER -->
+                    <div class="wrapper">
+                        {% if not is_popup %}
+                            <!-- START LEFT SIDEBAR NAV-->
+                            <aside id="left-sidebar-nav">
+                                <ul id="slide-out" class="side-nav leftside-navigation">
+                                    <li class="user-details {{ request.ADMIN_COLOR_THEME }} darken-2">
+                                        <div class="row">
+                                            <div class="col col s4 m4 l4">
+                                                <img src="/static/admin/images/avatar.png" alt=""
+                                                     class="circle responsive-img valign profile-image">
+                                            </div>
+                                            <div class="col col s8 m8 l8">
+                                                <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn"
+                                                   href="#"
+                                                   data-activates="profile-dropdown">{% firstof user.get_short_name user.get_username|capfirst %}</a>
+                                                <p class="user-roal">{% if  request.user.is_superuser %}Administrator{% else %}Other{% endif %}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <div class="divider"></div>
+                                    <li class="li-hover"><a href="/" class="ultra-small margin more-tex  "><i
+                                            class="mdi-navigation-arrow-back"></i>{% trans ' Back to website' %}</a>
+                                    </li>
+                                    {% if site_url %}
+                                        <li class="li-hover hide-on-large-only"><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{{ site_url }}">{% trans 'View site' %}</a></li>
+                                    {% endif %}
+                                    {% if user.is_active and user.is_staff %}
+                                        {% url 'django-admindocs-docroot' as docsroot %}
+                                        {% if docsroot %}
+                                            <li class="li-hover hide-on-large-only"><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{{ docsroot }}">{% trans 'Documentation' %}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if user.has_usable_password %}
+                                        <li class="li-hover hide-on-large-only">
+                                            <a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="li-hover hide-on-large-only"><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
+                                    {% for app in available_apps %}
+                                        <div class="divider"></div>
+                                        <li class="li-hover"><a href="{{ app.app_url }}"
+                                                                class="ultra-small {{ request.ADMIN_COLOR_THEME }} white-text margin more-tex center ">{{ app.app_label|capfirst }}</a>
+                                        </li>
+                                        {% for model in app.models %}
+                                            <li class="no-padding">
+                                                <ul class="collapsible collapsible-accordion">
+                                                    <li class="bold"><a class="{{ request.ADMIN_COLOR_THEME }}-text collapsible-header waves-effect waves-cyan"><i
+                                                            class="mdi-av-play-arrow"></i>{{ model.object_name }}</a>
+
+                                                        <div class="collapsible-body">
+                                                            <ul>
+                                                                {% if model.admin_url %}
+                                                                    <li>
+                                                                        <a href="{{ model.admin_url }}">
+                                                                            All {{ model.name }}</a>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li>All {{ model.name }}</li>
+                                                                {% endif %}
+                                                                {% if model.add_url %}
+                                                                    <li>
+                                                                        <a href="{{ model.add_url }}">{% trans 'Add' %} {{ model.name }}</a>
+                                                                    </li>
+                                                                {% endif %}
+                                                                {% if model.admin_url %}
+                                                                    <li>
+                                                                        <a href="{{ model.admin_url }}">{% trans 'Change' %} {{ model.name }}</a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                                <a href="#" data-activates="slide-out"
+                                   class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only white "><i
+                                        class="mdi-navigation-menu {{ request.ADMIN_COLOR_THEME }}-text"></i></a>
+                            </aside>
+                        {% endif %}
+                        <section id="content" class="section">
+                            <div class="row">
+                                <div class="col l12">
+                                    <div class="row">
+                                        {% block breadcrumbs %}
+                                        {% endblock %}
+                                    </div>
+                                    <div class="row">
+                                        <!--start container-->
+                                        <div class="container-fluid">
+                                            <div class="section">
+                                                <div class="divider"></div>
+                                                <!--Basic Form-->
+                                                <div id="basic-form" class="section">
+                                                    <div class="row">
+                                                        <div class="col s12 m12 l9">
+                                                            {% block content %}
+
+                                                                {{ content }}
+                                                            {% endblock %}
+                                                        </div>
+                                                        <div class="col l3 s12 m12">
+                                                            {% block object-tools %}{% endblock %}
+                                                            {% block sidebar %}
+                                                            {% endblock %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!-- END MAIN -->
+            {% else %}
+                <p>{% trans "You don't have permission to edit anything." %}</p>
+            {% endif %}
+        </div>
+    </div>
+
+
+    {#     <div id="content" class="{% block coltype %}colM{% endblock %}">#}
+    {#        {% block pretitle %}{% endblock %}#}
+    {#         {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}#}
+    {#        {% block content %}#}
+    {#        {% block object-tools %}{% endblock %}#}
+    {#        {{ content }}#}
+    {#        {% endblock %}#}
+    {#        {% block sidebar %}{% endblock %}#}
+    {#        <br class="clear" />#}
+    {#    </div>#}
+    {% block footer %}
+        <div id="footer">
+
+        </div>
+    {% endblock %}
+</div>
+<!-- END Container -->
+<script src="{% static "admin/js/materialize.min.js" %}" type="text/javascript"></script>
+<script src="{% static "admin/js/packages/perfect-scrollbar/perfect-scrollbar.min.js" %}" type="text/javascript"></script>
+<script src="{% static "admin/js/packages/tooltip/jquery.tooltipster.min.js" %}" type="text/javascript"></script>
+{% block messages %}
+    {% if messages %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                {% for message in messages %}
+                    Materialize.toast('{{ message|capfirst }}', 10000, 'white {{ request.ADMIN_COLOR_THEME }}-text')
+                {% endfor %}
+
+            });
+        </script>
+    {% endif %}
+    {% if not request.ADMIN_COLOR_THEME %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+               Materialize.toast('You are not added middleware, So please add middleware of djadmin in settings.py', 10000, 'white red-text')
+            });
+        </script>
+    {% endif %}
+{% endblock messages %}
+{% block extrajs %}{% endblock %}
+<script src="{% static "admin/js/plugins.min.js" %}" type="text/javascript"></script>
+</body>
+</html>

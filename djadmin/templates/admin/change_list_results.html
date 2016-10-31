@@ -1,0 +1,62 @@
+{% load i18n admin_static custom %}
+ {% admin_color_theme as ADMIN_COLOR_THEME %}
+{% if result_hidden_fields %}
+
+<div class="hiddenfields">{# DIV for HTML validation #}
+{% for item in result_hidden_fields %}{{ item }}{% endfor %}
+</div>
+{% endif %}
+{% if results %}
+<div class="results">
+<table id="result_list">
+<thead class="{{ ADMIN_COLOR_THEME }}">
+<tr>
+{% for header in result_headers %}
+<th scope="col" {{ header.class_attrib }}>
+   {% if header.sortable %}
+     {% if header.sort_priority > 0 %}
+       <div class="sortoptions right">
+         <a class="toggle left sortremove mdi-content-clear tooltip" href="{{ header.url_remove }}" title="{% trans "Remove from sorting" %}"></a>
+         {% if num_sorted_fields > 1 %}<span class="sortpriority tooltip" title="{% blocktrans with priority_number=header.sort_priority %}Sorting priority: {{ priority_number }}{% endblocktrans %}">{{ header.sort_priority }}</span>{% endif %}
+         <a href="{{ header.url_toggle }}" class="toggle tooltip right {% if header.ascending %}ascending mdi-hardware-keyboard-arrow-up{% else %}descending mdi-hardware-keyboard-arrow-down{% endif %}" title="{% trans "Toggle sorting" %}"></a>
+       </div>
+     {% endif %}
+   {% endif %}
+   <div class="text">{% if header.sortable %}<a href="{{ header.url_primary }}">{{ header.text|capfirst }}</a>{% else %}<span>
+       {% if "checkbox" in header.text and  forloop.counter == 1 %}
+            <input type="checkbox" class="filled-in" id="action-toggle"/>
+            <label for="action-toggle">&nbsp;&nbsp;</label>
+        {% else %}
+           {{ header.text|capfirst }}
+           {% endif %}
+       </span>{% endif %}</div>
+   <div class="clear"></div>
+</th>{% endfor %}
+<td class="field-delete white-text tooltip center" title="Delete"><i class="mdi-navigation-cancel small"></i></td>
+</tr>
+</thead>
+<tbody>
+{% for result in results %}
+{% if result.form.non_field_errors %}
+    <tr><td colspan="{{ result|length }}">{{ result.form.non_field_errors }}</td></tr>
+{% endif %}
+<tr class="{% cycle 'white' ' grey lighten-4' %}">
+    {% for item in result %}
+        {% if 'action-checkbox' in item and forloop.counter == 1 %}
+            <td class="action-checkbox">
+                <input class="action-select filled-in" name="_selected_action"
+                       id="_selected_action_{{ forloop.parentloop.counter }}" type="checkbox"
+                       value="{{ item|admin_change_list_value }}"/>
+                <label for="_selected_action_{{ forloop.parentloop.counter }}">&nbsp;&nbsp;</label>
+            </td>
+        {% else %}
+            {{ item }}
+        {% endif %}
+    {% endfor %}
+<td class="field-delete tooltip center" title="Delete this"><i class="mdi-action-delete small"></i></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}

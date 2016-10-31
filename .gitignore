@@ -1,0 +1,8 @@
+*.egg-info
+*.pot
+.tox/
+.idea/
+__pycache__
+MANIFEST
+dist/
+docs/_build/

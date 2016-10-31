@@ -1,0 +1,18 @@
+{% load custom %}
+ {% admin_color_theme as ADMIN_COLOR_THEME %}
+{% if show %}
+    <div class="card-panel">
+        <h5 class="header2">Date Hierarchy</h5>
+        <div class="xfull">
+            <ul class="toplinks">
+                {% if back %}
+                    <a href="{{ back.link }}" class="date-back {{ ADMIN_COLOR_THEME }}-text"><blockquote><h5 class="header2">&lsaquo; {{ back.title }}</h5></blockquote></a>
+                {% endif %}
+                {% for choice in choices %}
+                   {% if choice.link %} <a href="{{ choice.link }}" class="date-back {{ ADMIN_COLOR_THEME }}-text"><blockquote><h5 class="header2">{{ choice.title }}</h5></blockquote></a>{% endif %}
+                {% endfor %}
+            </ul>
+            <br class="clear"/>
+        </div>
+    </div>
+{% endif %}

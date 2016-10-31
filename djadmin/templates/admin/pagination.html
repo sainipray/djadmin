@@ -1,0 +1,23 @@
+{% load admin_list %}
+{% load i18n custom %}
+ {% admin_color_theme as ADMIN_COLOR_THEME %}
+<div class="divider"></div>
+<ul class="paginator pagination">
+    {% if pagination_required %}
+        {% for i in page_range %}
+            {% if i == cl.page_num %}
+             <li class="active {{ ADMIN_COLOR_THEME }}">{% paginator_number cl i %}</li>
+                {% else %}
+             <li class="waves-effect">{% paginator_number cl i %}</li>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <li class="r">
+    {{ cl.result_count }}
+    {% if cl.result_count == 1 %}{{ cl.opts.verbose_name }}{% else %}{{ cl.opts.verbose_name_plural }}{% endif %}
+    {% if show_all_url %}&nbsp;&nbsp;<a href="{{ show_all_url }}" class="showall {{ request.ADMIN_COLOR_THEME }}-text">{% trans 'Show all' %}</a>{% endif %}
+    {% if cl.formset and cl.result_count %}
+        <input type="submit" name="_save" class="default" value="{% trans 'Save' %}"/>{% endif %}
+</li>
+</ul>
+<div class="divider"></div>
