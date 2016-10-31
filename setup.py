@@ -4,7 +4,7 @@ setup(
     name='djadmin',
     version='1.0.0',
     packages=find_packages(),
-    url='https://www.neerajbyte.com/',
+    url='https://github.com/sainipray/djadmin',
     author='Neeraj Kumar',
     author_email='sainineeraj1234@gmail.com',
     description='Djadmin is django admin theme',
