@@ -15,8 +15,6 @@ Overview
 
 - Admin Header Title - Change django admin header title
 
-- Admin Language - Change django admin language using language short code
-
 Documentation
 =============
 
@@ -51,14 +49,19 @@ Documentation
    * Add 'ALLOW_FORGET_PASSWORD_ADMIN' for Enable Forget password option in login page, default: Disable ::
 
         ALLOW_FORGET_PASSWORD_ADMIN = True
+        EMAIL_USE_TLS = True
+        DEFAULT_FROM_EMAIL = '<Email ID>'
+        SERVER_EMAIL = '<Email ID>'
+        EMAIL_HOST = '<smtp.example.com>'  #Ex: Gmail : smtp.gmail.com
+        EMAIL_PORT = <Post Number>    #Ex: Gmail : 587
+        EMAIL_HOST_USER = '<Email ID>'
+        EMAIL_HOST_PASSWORD = '<Password>'
+        EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
    * Add 'ADMIN_COLOR_THEME'  for change admin color. you can write directly name of color. default: cyan ::
 
         ADMIN_COLOR_THEME = 'red'
 
-   * Add 'ADMIN_LANGUAGE' for particular language.Use language short code.check language code at `Language code list in django <https://github.com/django/django/blob/master/django/conf/locale/__init__.py>`_ . default: 'en'::
-
-        ADMIN_LANGUAGE = 'fr'
    * Add 'ADMIN_HEADER_TITLE' for change admin header title ::
 
         ADMIN_HEADER_TITLE  = 'Djadmin Administrator'
