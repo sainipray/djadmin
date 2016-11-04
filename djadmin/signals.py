@@ -20,15 +20,13 @@ def visitor(sender, user, request, **kwargs):
         else:
             device_type = "Unknown"
 
-        browser = request.user_agent.browser.family  # returns Browser(family=u'Mobile Safari', version=(5, 1), version_string='5.1')
-        browser_version = request.user_agent.browser.version_string  # returns Browser(family=u'Mobile Safari', version=(5, 1), version_string='5.1')
+        browser = request.user_agent.browser.family
+        browser_version = request.user_agent.browser.version_string
 
-        # Operating System properties
-        os_info = request.user_agent.os.family  # returns OperatingSystem(family=u'iOS', version=(5, 1), version_string='5.1')
-        os_info_version = request.user_agent.os.version_string  # returns OperatingSystem(family=u'iOS', version=(5, 1), version_string='5.1')
+        os_info = request.user_agent.os.family
+        os_info_version = request.user_agent.os.version_string
 
-        # Device properties
-        device_name = request.user_agent.device.family  # returns Device(family='iPhone')
+        device_name = request.user_agent.device.family
         device_name_brand = request.user_agent.device.brand
         device_name_model = request.user_agent.device.model
 
@@ -46,9 +44,6 @@ def visitor(sender, user, request, **kwargs):
             country = g.country_long
         else:
             location = geocoder.ipinfo(ipaddress)
-            # if not location.city:
-            #     location = geocoder.maxmind(ipaddress)
-            # http://www.maxmind.com/geoip/v2.0/city_isp_org/144.48.249.231?demo=1
             if location:
                 city = location.city
                 state = location.state

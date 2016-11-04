@@ -2,6 +2,8 @@ import re
 
 from django import template
 from django.apps import apps
+from django.contrib.admin.models import LogEntry,ContentType
+from django.db.models import Q
 
 from djadmin.models import Visitor
 
@@ -35,10 +37,10 @@ def calc_visitors():
     pc = visit.filter(device_type="PC").count()
     Mobile = visit.filter(device_type="Mobile").count()
     Tablet = visit.filter(device_type="Tablet").count()
-    Touch = visit.filter(device_type="Touch").count()
-    Bot = visit.filter(device_type="Bot").count()
-    Unknown = visit.filter(device_type="Unknown").count()
-    return {'pc': pc, 'mobile': Mobile, 'tablet': Tablet, 'touch': Touch, 'bot': Bot, 'unknown': Unknown}
+    Unknown = visit.filter(device_type="Touch").count()
+    Unknown += visit.filter(device_type="Bot").count()
+    Unknown += visit.filter(device_type="Unknown").count()
+    return {'pc': pc, 'mobile': Mobile, 'tablet': Tablet,'unknown': Unknown}
 
 
 @register.assignment_tag
@@ -61,3 +63,12 @@ def admin_color_theme():
     if hasattr(settings, 'ADMIN_COLOR_THEME'):
         ADMIN_COLOR_THEME = settings.ADMIN_COLOR_THEME
     return ADMIN_COLOR_THEME
+
+@register.assignment_tag
+def history_of_app(app_label,user):
+    models = ContentType.objects.filter(app_label=app_label).select_related()
+    q = Q()
+    for model in models:
+        q |= Q(content_type= model.pk)
+    log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('action_time')[:10]
+    return log_list

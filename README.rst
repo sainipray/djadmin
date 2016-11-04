@@ -2,14 +2,14 @@
 Djadmin
 ===============
 
-Djadmin is django admin theme
+Djadmin is a django admin theme
 
 Overview
 ========
 
-- Visior - Add visitor model for administrator location on each login and show graph of login device
+- Visior - Add visitor model for administrator location on each time login and show graph of login device
 
-- Forget Password Option - Admin can enable or disable forget password option on admin login
+- Forget Password Option - Admin can enable or disable forget password option on admin login page
 
 - Theme Color - Change theme color of admin
 
@@ -23,7 +23,7 @@ Documentation
 
       pip install djadmin
 
-   * Add 'djadmin' in INSTALLED_APPS list at Top position ::
+   * Add 'djadmin' to your INSTALLED_APPS just before 'django.contrib.admin' ::
 
       'djadmin',
 

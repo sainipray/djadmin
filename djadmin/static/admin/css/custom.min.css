@@ -95,8 +95,6 @@ ul.side-nav.leftside-navigation li a {
     border: 1px solid #eaeaea;
     border-radius: 4px;
     overflow: hidden;
-    width: 28em;
-    min-width: 300px;
     margin: 100px auto;
 }
 
@@ -252,12 +250,6 @@ ul.side-nav.leftside-navigation li.user-details #profile-dropdown a {
     margin-top: 10px;
 }
 
-.selector-available, .selector-chosen {
-    width: 49.6666666667% !important;
-    margin-left: auto;
-    left: auto;
-    right: auto;
-}
 .selector-chosen{
     padding-left: 2%;
 }
@@ -452,4 +444,19 @@ small{
 }
 p.errornote{
    color: red;
+}
+.submit_pad{
+    margin-bottom: 10px;
+}
+
+.tabular-delete {
+    padding: 0px 10px;
+    font-size: 0.7rem;
+    height: calc(100% - 15px);
+    width: 100%
+}
+
+.tabular-delete-td {
+    vertical-align: middle;
+    width: 60px
 }

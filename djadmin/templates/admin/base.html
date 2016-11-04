@@ -132,20 +132,12 @@
                                                             <ul>
                                                                 {% if model.admin_url %}
                                                                     <li>
-                                                                        <a href="{{ model.admin_url }}">
-                                                                            All {{ model.name }}</a>
+                                                                        <a href="{{ model.admin_url }}">{% trans 'All' %} {{ model.name }}</a>
                                                                     </li>
-                                                                {% else %}
-                                                                    <li>All {{ model.name }}</li>
                                                                 {% endif %}
                                                                 {% if model.add_url %}
                                                                     <li>
                                                                         <a href="{{ model.add_url }}">{% trans 'Add' %} {{ model.name }}</a>
-                                                                    </li>
-                                                                {% endif %}
-                                                                {% if model.admin_url %}
-                                                                    <li>
-                                                                        <a href="{{ model.admin_url }}">{% trans 'Change' %} {{ model.name }}</a>
                                                                     </li>
                                                                 {% endif %}
                                                             </ul>
@@ -163,7 +155,7 @@
                         {% endif %}
                         <section id="content" class="section">
                             <div class="row">
-                                <div class="col l12">
+                                <div class="col s12">
                                     <div class="row">
                                         {% block breadcrumbs %}
                                         {% endblock %}
@@ -203,18 +195,6 @@
             {% endif %}
         </div>
     </div>
-
-
-    {#     <div id="content" class="{% block coltype %}colM{% endblock %}">#}
-    {#        {% block pretitle %}{% endblock %}#}
-    {#         {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}#}
-    {#        {% block content %}#}
-    {#        {% block object-tools %}{% endblock %}#}
-    {#        {{ content }}#}
-    {#        {% endblock %}#}
-    {#        {% block sidebar %}{% endblock %}#}
-    {#        <br class="clear" />#}
-    {#    </div>#}
     {% block footer %}
         <div id="footer">
 
@@ -232,7 +212,6 @@
                 {% for message in messages %}
                     Materialize.toast('{{ message|capfirst }}', 10000, 'white {{ request.ADMIN_COLOR_THEME }}-text')
                 {% endfor %}
-
             });
         </script>
     {% endif %}

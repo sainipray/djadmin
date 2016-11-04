@@ -1,5 +1,5 @@
 {% extends "admin/index.html" %}
-{% load i18n %}
+{% load i18n custom %}
 
 {% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
 
@@ -45,4 +45,42 @@
     </div>
 {% endblock %}
 
-{% block sidebar %}{% endblock %}
+{% block sidebar %}
+    {% history_of_app app_label user as action_list %}
+       <div class="card-panel">
+        <h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans 'Recent Actions' %} </h5>
+        <div class="divider"></div>
+        <h6 class="header2 {{ request.ADMIN_COLOR_THEME }}-text"><b>{% trans 'My Actions' %}</b></h6>
+        {% if not action_list %}
+            <p>{% trans 'None available' %}</p>
+        {% else %}
+            <div class="row">
+                {% for entry in action_list %}
+                    <div class="divider"></div>
+                    <div class="row sidebar-padding">
+                        <div class="col s7 grey-text darken-1">
+                            <i class="{% if entry.is_addition %}mdi-content-add{% endif %}{% if entry.is_change %}mdi-image-edit{% endif %}{% if entry.is_deletion %}mdi-action-delete{% endif %}"></i>
+                            {% if entry.is_deletion or not entry.get_admin_url %}
+                                {{ entry.object_repr }}
+                            {% else %}
+                                <a class="{{ request.ADMIN_COLOR_THEME }}-text"
+                                   href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                            {% endif %}
+                        </div>
+                        {% if entry.content_type %}
+                            <div class="col s5 grey-text text-darken-4 right-align">
+                                {% filter capfirst %}
+                                    {{ entry.content_type }}{% endfilter %}
+                            </div>
+                        {% else %}
+                            <div class="col s7 grey-text text-darken-4 right-align">
+                                {% trans 'Unknown content' %}
+                            </div>
+
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -45,9 +45,7 @@
         </nav>
     {% endblock %}
 {% endif %}
-
 {% block coltype %}flex{% endblock %}
-
 {% block content %}
     <div class="card-panel">
         <div class="row">
@@ -62,10 +60,8 @@
                 {% endif %}
             </div>
         </div>
-
         <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
             {% block search %}{% search_form cl %}{% endblock %}
-
             <form id="changelist-form" method="post"{% if cl.formset.is_multipart %}
                   enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
                 {% if cl.formset %}
@@ -103,9 +99,6 @@
     {% endblock %}
     {% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
 {% endblock %}
-
-
-
 {% block extrajs %}
 <script type="text/javascript">
 (function($) {

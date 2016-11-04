@@ -1,6 +1,6 @@
 {% extends "admin/base.html" %}
 
-{% block title %}DJWP admin{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block branding %}
 <a class="brand-logo {% block header-align %}{% endblock %}" href="{% url 'admin:index' %}">{{ request.ADMIN_HEADER_TITLE }}</a>

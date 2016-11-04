@@ -8,11 +8,11 @@
 {% endif %}
 {% if results %}
 <div class="results">
-<table id="result_list">
-<thead class="{{ ADMIN_COLOR_THEME }}">
-<tr>
+<table id="result_list" class="section">
+<thead class="{{ ADMIN_COLOR_THEME }} row">
+<tr class="row">
 {% for header in result_headers %}
-<th scope="col" {{ header.class_attrib }}>
+<th scope="col" {{ header.class_attrib }} class="col s12">
    {% if header.sortable %}
      {% if header.sort_priority > 0 %}
        <div class="sortoptions right">

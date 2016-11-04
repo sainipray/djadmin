@@ -33,7 +33,7 @@
                             <div class="card hoverable {% cycle 'cyan' 'amber' 'green' 'pink' 'teal' 'red' 'light-blue' 'purple' 'blue-grey' as rowcolors %}">
                                 <div class="card-content white-text center-align">
                                     <p class="card-title">{{ app.app_label|cal_total:model.object_name }}</p>
-                                    <p>{{ model.name }}</p>
+                                    <p>{{ app.app_label|capfirst }} : - {{ model.name }}</p>
                                 </div>
                             </div>
                         </div>
@@ -43,19 +43,18 @@
         </div>
         <div class="divider"></div>
         {% visitors as visitor %}
-        {% if visitor %}
-            <div class="row">
+            <div class="row" id="card-visitor">
                 <ul class="collection with-header">
                     <li class="collection-header {{ request.ADMIN_COLOR_THEME }} white-text">
-                        <h5>Last visit's</h5>
+                        <h5>{% trans "Login status" %}</h5>
                     </li>
                 </ul>
                 <ul class="collapsible collapsible-accordion col l6 m12 s12" data-collapsible="accordion">
                     {% for visit in visitor %}
                         <li>
                             <div class="collapsible-header">
-                                <div class="col l1 {{ visit.device_type }}"></div>
-                                <div class="col l4"> {{ visit.os_info }}</div>
+                                <div class="col l1 {{ visit.device_type }} hide-on-med-and-down"></div>
+                                <div class="col l4"> {{ visit.os_info }} {{ visit.device_type }}</div>
                                 <div class="col l6 hide-on-med-and-down">{{ visit.visit_datetime|date }} {{ visit.visit_datetime|time }}</div>
                             </div>
                             <div class="collapsible-body">
@@ -76,8 +75,8 @@
                                     <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
                                         <div class="row">
                                             <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i> OS</div>
-                                            <div class="col s7 right-align">{{ visit.os_info }} {{ visit.os_info_version }}<br>
-                                                <div class=" col l2 right {{ visit.device_type }}"></div>
+                                            <div class="col s7 right-align">{{ visit.os_info }} {{ visit.os_info_version }} {{ visit.device_type }}<br>
+                                                <div class=" col s5 right {{ visit.device_type }}"></div>
                                             </div>
                                         </div>
                                     </li>
@@ -90,14 +89,12 @@
                                             </div>
                                         </li>
                                     {% endif %}
-                                    {% if not visit.ipaddress == "127.0.0.1" or visit.ipaddress == "" %}
+                                    {% if visit.city != "" or visit.ipaddress != "127.0.0.1" or visit.ipaddress != "" %}
                                         <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
                                             <div class="row">
-                                                <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i>
-                                                    Location
-                                                </div>
+                                                <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i>Location</div>
                                                 <div class="col s7 right-align ">{{ visit.city }}, {{ visit.state }}, {{ visit.country }}<br>
-                                                    <div class=" col l12 right">{{ visit.ipaddress }}</div>
+                                                    <div class=" col s12 right">{{ visit.ipaddress }}</div>
                                                 </div>
                                             </div>
                                         </li>
@@ -107,22 +104,21 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <div class="col l6">
+                <div class="col l6 s12 m12">
                     <div class="row">
                         <canvas id="doughnut" width="200" height="200"></canvas>
                     </div>
                 </div>
             </div>
             <div class="divider"></div>
-        {% endif %}
     </div>
 
 {% endblock %}
 {% block sidebar %}
     <div class="card-panel">
-        <h5 class="header2">{% trans 'Recent Actions' %}</h5>
+        <h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans 'Recent Actions' %}</h5>
         <div class="divider"></div>
-        <h6 class="header2"><b>{% trans 'My Actions' %}</b></h6>
+        <h6 class="header2  {{ request.ADMIN_COLOR_THEME }}-text"><b>{% trans 'My Actions' %}</b></h6>
         {% load log %}
         {% get_admin_log 10 as admin_log for_user user %}
         {% if not admin_log %}
@@ -137,8 +133,7 @@
                             {% if entry.is_deletion or not entry.get_admin_url %}
                                 {{ entry.object_repr }}
                             {% else %}
-                                <a class="{{ request.ADMIN_COLOR_THEME }}-text"
-                                   href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                                <a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
                             {% endif %}
                         </div>
                         {% if entry.content_type %}
@@ -150,7 +145,6 @@
                             <div class="col s7 grey-text text-darken-4 right-align">
                                 {% trans 'Unknown content' %}
                             </div>
-
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -170,23 +164,19 @@
                     data: [
                         {{ calc_visitor.mobile }},
                         {{ calc_visitor.tablet }},
-                        {{ calc_visitor.touch }},
                         {{ calc_visitor.pc }},
-                        {{ calc_visitor.bot }},
                         {{ calc_visitor.unknown }}
                     ],
                     backgroundColor: [
                         "#f44336",
                         "#9c27b0",
                         "#3f51b5",
-                        "#009688",
-                        "#4caf50",
                         "#2196f3"
                     ],
                     label: 'Dataset 1'
                 }
                 ],
-                labels: ['Mobile', 'Tablet', 'Touch Capable', 'PC', 'Bot', 'Unknown']
+                labels: ['Mobile', 'Tablet', 'PC', 'Unknown']
             },
             options: {
                 responsive: true,

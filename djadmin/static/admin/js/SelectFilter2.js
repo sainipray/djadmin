@@ -42,11 +42,11 @@ Requires jQuery, core.js, and SelectBox.js.
 
             // <div class="selector"> or <div class="selector stacked">
             var selector_div = quickElement('div', from_box.parentNode);
-            selector_div.className = is_stacked ? 'selector stacked' : 'selector';
+            selector_div.className = is_stacked ? 'selector stacked row' : 'selector row';
 
             // <div class="selector-available">
             var selector_available = quickElement('div', selector_div);
-            selector_available.className = 'selector-available';
+            selector_available.className = 'selector-available col l6 s12 m12';
             var title_available = quickElement('h2', selector_available, interpolate(gettext('Available %s') + ' ', [field_name]));
             quickElement(
                 'i', title_available, '',
@@ -78,11 +78,11 @@ Requires jQuery, core.js, and SelectBox.js.
             var choose_all_row = quickElement('div',selector_available);
             choose_all_row.className = 'row';
             var choose_all = quickElement('a', choose_all_row, gettext('Choose all'), 'title', interpolate(gettext('Click to choose all %s at once.'), [field_name]), 'href', '#', 'id', field_id + '_add_all_link');
-            choose_all.className = 'selector-chooseall-shade tooltip  btn cyan col l12 waves-effect waves-light ';
+            choose_all.className = 'selector-chooseall-shade tooltip  btn cyan col s12 waves-effect waves-light ';
 
             // <ul class="selector-chooser">
             var selector_chooser = quickElement('ul', selector_div);
-            selector_chooser.className = 'selector-chooser';
+            selector_chooser.className = 'selector-chooser ';
             var add_link = quickElement('a', quickElement('li', selector_chooser), gettext('Choose'), 'title', gettext('Choose'), 'href', '#', 'id', field_id + '_add_link');
             add_link.className = 'selector-add tooltip';
             var remove_link = quickElement('a', quickElement('li', selector_chooser), gettext('Remove'), 'title', gettext('Remove'), 'href', '#', 'id', field_id + '_remove_link');
@@ -90,7 +90,7 @@ Requires jQuery, core.js, and SelectBox.js.
 
             // <div class="selector-chosen">
             var selector_chosen = quickElement('div', selector_div);
-            selector_chosen.className = 'selector-chosen';
+            selector_chosen.className = 'selector-chosen col l6 s12 m12';
             var title_chosen = quickElement('h2', selector_chosen, interpolate(gettext('Chosen %s') + ' ', [field_name]));
             quickElement(
                 'i', title_chosen, '',
@@ -110,7 +110,7 @@ Requires jQuery, core.js, and SelectBox.js.
             var clear_all_row = quickElement('div',selector_chosen);
             clear_all_row.className = 'row';
             var clear_all = quickElement('a', clear_all_row, gettext('Remove all'), 'title', interpolate(gettext('Click to remove all chosen %s at once.'), [field_name]), 'href', '#', 'id', field_id + '_remove_all_link');
-            clear_all.className = 'selector-clearall-shade btn cyan col tooltip l12 waves-effect waves-light ';
+            clear_all.className = 'selector-clearall-shade btn cyan col tooltip s12 waves-effect waves-light ';
 
             from_box.setAttribute('name', from_box.getAttribute('name') + '_old');
 

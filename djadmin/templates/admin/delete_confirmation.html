@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls %}
-
+{% block  navbar-fixed %} navbar-fixed{% endblock %}
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} delete-confirmation{% endblock %}
 
 {% block breadcrumbs %}
@@ -44,8 +44,8 @@
     <input type="hidden" name="post" value="yes" />
     {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
     {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
-    <button type="submit" class="btn  {{ request.ADMIN_COLOR_THEME }} waves-effect waves-light" value="{% trans "Yes, I'm sure" %}">{% trans "Yes, I'm sure" %}</button>
-    <a href="#" onclick="window.history.back(); return false;" class="btn cancel-link red waves-effect waves-light">{% trans "No, take me back" %}</a>
+    <button type="submit" class="btn  {{ request.ADMIN_COLOR_THEME }} waves-effect waves-light submit_pad" value="{% trans "Yes, I'm sure" %}">{% trans "Yes, I'm sure" %}</button>
+    <a href="#" onclick="window.history.back(); return false;" class="btn cancel-link red waves-effect waves-light submit_pad">{% trans "No, take me back" %}</a>
     </div>
     </form>
 {% endif %}

@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify material_form  material_admin custom  %}
+{% load i18n admin_urls admin_static admin_modify djadmin_form  djadmin custom  %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -37,8 +37,11 @@
                 <blockquote>
                  <h5 class="">
                     {% if data.prev %}
-                      <a href="{% url opts|admin_urlname:'change' data.prev|admin_urlquote %}" class="{{ request.ADMIN_COLOR_THEME }}-text"><span class="header2"> < {% trans "Prev" %} |</span></a>
+                      <a href="{% url opts|admin_urlname:'change' data.prev|admin_urlquote %}" class="{{ request.ADMIN_COLOR_THEME }}-text"><span class="header2"> < {% trans "Prev" %} </span></a>
                     {% endif %}
+                    {% if data.next and data.prev %}
+                        <span class="{{ request.ADMIN_COLOR_THEME }}-text">|</span>
+                        {% endif %}
                     {% if data.next %}
                         <a href="{% url opts|admin_urlname:'change' data.next|admin_urlquote %}" class="{{ request.ADMIN_COLOR_THEME }}-text"><span class="header2">{% trans "Next" %} > </span></a>
                     {% endif %}
