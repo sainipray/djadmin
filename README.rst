@@ -56,7 +56,7 @@ Documentation
         DEFAULT_FROM_EMAIL = '<Email ID>'
         SERVER_EMAIL = '<Email ID>'
         EMAIL_HOST = '<smtp.example.com>'  #Ex: Gmail : smtp.gmail.com
-        EMAIL_PORT = <Post Number>    #Ex: Gmail : 587
+        EMAIL_PORT = <Port Number>    #Ex: Gmail : 587
         EMAIL_HOST_USER = '<Email ID>'
         EMAIL_HOST_PASSWORD = '<Password>'
         EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
