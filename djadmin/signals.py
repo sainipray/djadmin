@@ -35,23 +35,25 @@ def visitor(sender, user, request, **kwargs):
             ipaddress = ipaddress.split(", ")[0]
         else:
             ipaddress = request.META.get("REMOTE_ADDR", "")
-        if not request.POST['latitude'] == '':
-            latitude = request.POST['latitude']
-            longitude = request.POST['longitude']
-            g = geocoder.google([latitude, longitude], method='reverse')
-            city = g.city
-            state = g.state_long
-            country = g.country_long
-        else:
-            location = geocoder.ipinfo(ipaddress)
-            if location:
-                city = location.city
-                state = location.state
-                country = location.country
+        city = None
+        state = None
+        country = None
+        try:
+            if not request.POST['latitude'] == '':
+                latitude = request.POST['latitude']
+                longitude = request.POST['longitude']
+                g = geocoder.google([latitude, longitude], method='reverse')
+                city = g.city
+                state = g.state_long
+                country = g.country_long
             else:
-                city = "Unknown"
-                state = "Unknown"
-                country = "Unknown"
+                location = geocoder.ipinfo(ipaddress)
+                if location:
+                    city = location.city
+                    state = location.state
+                    country = location.country
+        except Exception as e:
+            pass
         username = request.user
         unique_computer = request.META.get("PROCESSOR_IDENTIFIER", None)
         visitor = Visitor(device_type=device_type, name=username, ipaddress=ipaddress, browser=browser,

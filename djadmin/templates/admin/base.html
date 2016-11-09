@@ -225,5 +225,39 @@
 {% endblock messages %}
 {% block extrajs %}{% endblock %}
 <script src="{% static "admin/js/plugins.min.js" %}" type="text/javascript"></script>
+<style>
+    a {
+    color: {{ request.ADMIN_COLOR_THEME }};
+}
+    input[type=text]:focus:not([readonly])+label, input[type=password]:focus:not([readonly])+label, input[type=email]:focus:not([readonly])+label, input[type=url]:focus:not([readonly])+label, input[type=time]:focus:not([readonly])+label, input[type=date]:focus:not([readonly])+label, input[type=datetime-local]:focus:not([readonly])+label, input[type=tel]:focus:not([readonly])+label, input[type=number]:focus:not([readonly])+label, input[type=search]:focus:not([readonly])+label, textarea.materialize-textarea:focus:not([readonly])+label {
+    color: {{ request.ADMIN_COLOR_THEME }} !important;
+}
+    input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid {{ request.ADMIN_COLOR_THEME }};
+    box-shadow: 0 1px 0 0 {{ request.ADMIN_COLOR_THEME }};
+}
+    [type="checkbox"].filled-in:checked+label:after {
+    border: 2px solid {{ request.ADMIN_COLOR_THEME }};
+    background-color: {{ request.ADMIN_COLOR_THEME }};
+}
+    [type="checkbox"]:checked+label:before {
+        border-right: 2px solid {{ request.ADMIN_COLOR_THEME }};
+        border-bottom: 2px solid {{ request.ADMIN_COLOR_THEME }};
+    }
+    .input-field .prefix.active {
+    color: {{ request.ADMIN_COLOR_THEME }};
+}
+    .dropdown-content li>a, .dropdown-content li>span {
+    color: {{ request.ADMIN_COLOR_THEME }};
+}
+    .c-datepicker__header-date {
+    background: {{ request.ADMIN_COLOR_THEME }};
+
+}
+    .c-datepicker__header-day {
+        background: {{ request.ADMIN_COLOR_THEME }};
+    }
+
+</style>
 </body>
 </html>

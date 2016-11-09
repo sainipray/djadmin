@@ -57,12 +57,14 @@
                     <div class="row">
                         <div class="input-field col s12">
                             {{ form.username.errors }}
+                            <i class="mdi-action-account-circle prefix"></i>
                             {{ form.username.label_tag }} {{ form.username }}
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
                             {{ form.password.errors }}
+                            <i class="mdi-action-lock-outline prefix"></i>
                             {{ form.password.label_tag }} {{ form.password }}
                             <input type="hidden" name="next" value="{{ next }}"/>
                         </div>
@@ -82,7 +84,7 @@
                         </div>
                         {% if request.ALLOW_FORGET_PASSWORD_ADMIN %}
                             <div class="input-field col s12 center">
-                                <a href="{% url 'password_reset' %}" class="cyan-text"
+                                <a href="{% url 'password_reset' %}"
                                    name="action">Forgot password ?</a>
                             </div>
                         {% endif %}

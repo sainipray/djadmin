@@ -88,10 +88,12 @@
   right: 0; }
 
 .c-datepicker__back:before {
-  content: 'chevron_left'; }
+  font-family: "Material-Design-Icons";
+  content: "\e7c2"; }
 
 .c-datepicker__next:after {
-  content: 'chevron_right'; }
+    font-family: "Material-Design-Icons";
+    content: "\e7c3";  }
 
 .c-datepicker--show-time:after {
   content: 'access_time';

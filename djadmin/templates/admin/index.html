@@ -89,7 +89,7 @@
                                             </div>
                                         </li>
                                     {% endif %}
-                                    {% if visit.city != "" or visit.ipaddress != "127.0.0.1" or visit.ipaddress != "" %}
+                                    {% if visit.city %}
                                         <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
                                             <div class="row">
                                                 <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i>Location</div>
@@ -112,7 +112,6 @@
             </div>
             <div class="divider"></div>
     </div>
-
 {% endblock %}
 {% block sidebar %}
     <div class="card-panel">
@@ -176,7 +175,7 @@
                     label: 'Dataset 1'
                 }
                 ],
-                labels: ['Mobile', 'Tablet', 'PC', 'Unknown']
+                labels: ['Mobile', 'Tablet', 'PC', 'Other']
             },
             options: {
                 responsive: true,

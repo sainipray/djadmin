@@ -4,6 +4,9 @@ Djadmin
 
 Djadmin is a django admin theme
 
+.. image:: https://img.shields.io/pypi/v/djadmin.svg
+    :target: https://pypi.python.org/pypi/djadmin
+
 Overview
 ========
 
@@ -65,6 +68,17 @@ Documentation
    * Add 'ADMIN_HEADER_TITLE' for change admin header title ::
 
         ADMIN_HEADER_TITLE  = 'Djadmin Administrator'
+
+Screenshot
+==========
+.. image:: .screen1.jpg
+   :width: 400px
+
+.. image:: .screen2.jpg
+   :width: 400px
+
+.. image:: .screen3.jpg
+   :width: 400px
 
 License
 =======

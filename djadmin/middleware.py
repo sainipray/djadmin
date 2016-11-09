@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.functional import SimpleLazyObject
-
+from django.contrib.admin.sites import AdminSite
 from .util import get_user_agent
 
 
@@ -23,7 +23,6 @@ class DJMiddleware(MiddlewareMixin):
 
         if hasattr(settings, 'ADMIN_HEADER_TITLE'):
             ADMIN_HEADER_TITLE = settings.ADMIN_HEADER_TITLE
-
-        request.ADMIN_HEADER_TITLE = ADMIN_HEADER_TITLE
+        AdminSite.site_header = ADMIN_HEADER_TITLE
         request.ADMIN_COLOR_THEME = ADMIN_COLOR_THEME
         request.ALLOW_FORGET_PASSWORD_ADMIN = ALLOW_FORGET_PASSWORD_ADMIN

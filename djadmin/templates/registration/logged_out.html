@@ -1,7 +1,7 @@
 {% extends "registration/base_site.html" %}
 {% load i18n %}
 {% block bodyclass %}{{ block.super }}login{% endblock %}
-
+{% block header-align %}center{% endblock %}
 
 {% block content %}
     <div id="login-form">
@@ -13,7 +13,7 @@
             </div>
             <div class="card-action darken-2 center">
                 <a href="{% url 'admin:index' %}"
-                   class="waves-effect waves-light red  btn white-text">{% trans 'Log in again' %}</a>
+                   class="waves-effect waves-light {{ request.ADMIN_COLOR_THEME }}  btn white-text">{% trans 'Log in again' %}</a>
             </div>
         </div>
     </div>

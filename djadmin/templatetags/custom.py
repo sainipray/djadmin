@@ -72,3 +72,10 @@ def history_of_app(app_label,user):
         q |= Q(content_type= model.pk)
     log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('action_time')[:10]
     return log_list
+
+@register.assignment_tag
+def get_site_header():
+    get_site_title = "Django administrator"
+    if hasattr(settings, 'ADMIN_HEADER_TITLE'):
+        get_site_title = settings.ADMIN_HEADER_TITLE
+    return get_site_title
