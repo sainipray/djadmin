@@ -271,9 +271,6 @@ ul.side-nav.leftside-navigation li.user-details #profile-dropdown a {
 .selector .selector-available h2 {
     background: #757575 !important;
 }
-.selector .selector-chosen h2 {
-    background: #00bcd4 !important;
-}
 
 .selector select {
     width: 100% !important;

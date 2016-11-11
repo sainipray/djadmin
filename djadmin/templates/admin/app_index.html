@@ -28,13 +28,13 @@
             {% for apps_model in app_list %}
                 {% for app in apps_model.models %}
                     <li class="collection-item">
-                        <div><a href="{{ app.admin_url }}" class="{{ request.ADMIN_COLOR_THEME }}-text" >{{ app.name }}</a>
+                        <div><a href="{{ app.admin_url }}" >{{ app.name }}</a>
                             <a href="{{ app.admin_url }}" class="secondary-content ">
                                 <i class="mdi-content-create red-text">Change</i>
                             </a>
                             {% if app.add_url %}
-                            <a href="{{ app.add_url }}" class="secondary-content teal-text">
-                                <i class="mdi-content-add green-text">Add</i>
+                            <a href="{{ app.add_url }}" class="secondary-content {{ request.ADMIN_COLOR_THEME }}-text">
+                                <i class="mdi-content-add {{ request.ADMIN_COLOR_THEME }}-text">Add</i>
                             </a>
                             {% endif %}
                         </div>
