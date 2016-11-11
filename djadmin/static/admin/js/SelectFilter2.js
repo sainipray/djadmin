@@ -15,6 +15,7 @@ Requires jQuery, core.js, and SelectBox.js.
             return findForm(node.parentNode);
         }
         return node;
+
     }
 
     window.SelectFilter = {
@@ -78,7 +79,7 @@ Requires jQuery, core.js, and SelectBox.js.
             var choose_all_row = quickElement('div',selector_available);
             choose_all_row.className = 'row';
             var choose_all = quickElement('a', choose_all_row, gettext('Choose all'), 'title', interpolate(gettext('Click to choose all %s at once.'), [field_name]), 'href', '#', 'id', field_id + '_add_all_link');
-            choose_all.className = 'selector-chooseall-shade tooltip  btn cyan col s12 waves-effect waves-light ';
+            choose_all.className = 'selector-chooseall-shade tooltip  btn '+color_name+'  col s12 waves-effect waves-light ';
 
             // <ul class="selector-chooser">
             var selector_chooser = quickElement('ul', selector_div);
@@ -110,7 +111,7 @@ Requires jQuery, core.js, and SelectBox.js.
             var clear_all_row = quickElement('div',selector_chosen);
             clear_all_row.className = 'row';
             var clear_all = quickElement('a', clear_all_row, gettext('Remove all'), 'title', interpolate(gettext('Click to remove all chosen %s at once.'), [field_name]), 'href', '#', 'id', field_id + '_remove_all_link');
-            clear_all.className = 'selector-clearall-shade btn cyan col tooltip s12 waves-effect waves-light ';
+            clear_all.className = 'selector-clearall-shade btn col tooltip '+color_name+' s12 waves-effect waves-light ';
 
             from_box.setAttribute('name', from_box.getAttribute('name') + '_old');
 

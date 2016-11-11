@@ -151,4 +151,34 @@
         });
     {% endverbatim %}
     </script>
+    <style type="text/css">
+    .selector .selector-chosen h2 {
+        background: {{ request.ADMIN_COLOR_THEME_CODE }} !important;
+    }
+    .selector ::-webkit-scrollbar-thumb {
+        background: {{ request.ADMIN_COLOR_THEME_CODE }};
+    }
+    .u-hover-ball-effect:hover:before, .c-datepicker__day-body:hover:before, .c-datepicker__clock__num:hover:before, .c-datepicker__clock__am-pm-toggle label:hover:before {
+        background: {{ request.ADMIN_COLOR_THEME_CODE }};
+    }
+     .c-datepicker__header-date {
+        background: {{ request.ADMIN_COLOR_THEME_CODE }};
+    }
+    .c-datepicker__header-day {
+        background: {{ request.ADMIN_COLOR_THEME_CODE }};
+    }
+    .c-datepicker__clock-hands {
+        background: {{ request.ADMIN_COLOR_THEME_CODE }};
+    }
+    .c-datepicker__clock-hands .c-datepicker__hour-hand {
+        background: {{ request.ADMIN_COLOR_THEME_CODE }} !important;
+    }
+    .c-datepicker__clock__am-pm-toggle label.c-datepicker__toggle--checked::after{
+        background: {{ request.ADMIN_COLOR_THEME_CODE }} !important;
+    }
+     .c-datepicker__back:focus, .c-datepicker__next:focus, .c-datepicker__toggle:focus {
+        background-color: {{ request.ADMIN_COLOR_THEME_CODE }};
+    }
+
+    </style>
 {% endblock %}
