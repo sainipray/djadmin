@@ -73,7 +73,6 @@
 
     <div id="content" class="{% block coltype %}colM{% endblock %}">
         <div id="content-main">
-
             {% if available_apps %}
                 <!-- START MAIN -->
                 <div id="main">
@@ -191,7 +190,21 @@
                 </div>
                 <!-- END MAIN -->
             {% else %}
-                <p>{% trans "You don't have permission to edit anything." %}</p>
+                  <div id="permission-not-available" class="modal {{ request.ADMIN_COLOR_THEME }} white-text">
+                    <div class="modal-content center">
+                      <p>{% trans "You don't have permission to edit anything." %}</p>
+                    </div>
+                    <div class="modal-footer">
+                      <a href="{% url 'admin:logout' %}" class=" modal-action {{ request.ADMIN_COLOR_THEME }} white-text modal-close waves-effect waves-green btn-flat">LOGOUT</a>
+                    </div>
+                  </div>
+                <script>
+                    $(document).ready(function() {
+                        $('#permission-not-available').openModal({
+                             dismissible: false
+                        });
+                    });
+                </script>
             {% endif %}
         </div>
     </div>
@@ -205,6 +218,7 @@
 <script src="{% static "admin/js/materialize.min.js" %}" type="text/javascript"></script>
 <script src="{% static "admin/js/packages/perfect-scrollbar/perfect-scrollbar.min.js" %}" type="text/javascript"></script>
 <script src="{% static "admin/js/packages/tooltip/jquery.tooltipster.min.js" %}" type="text/javascript"></script>
+<script src="{% static "admin/js/packages/pace/pace.min.js" %}" type="text/javascript"></script>
 {% block messages %}
     {% if messages %}
         <script type="text/javascript">
@@ -225,6 +239,7 @@
 {% endblock messages %}
 {% block extrajs %}{% endblock %}
 <script src="{% static "admin/js/plugins.min.js" %}" type="text/javascript"></script>
+
 <style>
     a {
     color: {{ request.ADMIN_COLOR_THEME_CODE }};

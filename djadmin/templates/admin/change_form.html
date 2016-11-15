@@ -120,6 +120,7 @@
 </form></div>
 {% endblock %}
 {% block extrajs %}
+    <script>color_name = "{{ request.ADMIN_COLOR_THEME }}";</script>
     <link rel="stylesheet" href="{% static 'admin/js/packages/datetime/css/datepicker.css' %}" type="text/css">
     <script type="text/javascript" src="{% static 'admin/js/packages/datetime/js/datepicker.standalone.js' %}"></script>
     <script type="text/javascript" src="{% static 'admin/js/jquery.formset.js' %}"></script>

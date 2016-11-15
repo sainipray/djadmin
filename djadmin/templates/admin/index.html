@@ -152,7 +152,7 @@
     </div>
 {% endblock %}
 {% block extrajs %}
-
+{% if available_apps %}
     {% calc_visitors as calc_visitor %}
     <script type="text/javascript" src="{% static 'admin/js/packages/graph/Chart.bundle.js' %}"></script>
     <script type="text/javascript">
@@ -197,4 +197,5 @@
             window.myDoughnut = new Chart(ctx, config);
         };
     </script>
+    {% endif %}
 {% endblock %}

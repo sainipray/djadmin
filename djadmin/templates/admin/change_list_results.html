@@ -49,6 +49,18 @@
                        value="{{ item|admin_change_list_value }}"/>
                 <label for="_selected_action_{{ forloop.parentloop.counter }}">&nbsp;&nbsp;</label>
             </td>
+        {% elif '<img' in item %}
+            {% if 'icon-yes' in item %}
+                <td>
+                    <a class="btn-floating waves-effect waves-light green"><i class="mdi-navigation-check"></i></a>
+                </td>
+            {% elif 'icon-no' in item %}
+                <td>
+                    <a class="btn-floating waves-effect waves-light red"><i class="mdi-navigation-close"></i></a>
+                </td>
+            {% else %}
+                {{ item }}
+            {% endif %}
         {% else %}
             {{ item }}
         {% endif %}
