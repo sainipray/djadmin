@@ -1,3 +1,4 @@
+import os
 import re
 
 from django import template
@@ -79,3 +80,15 @@ def get_site_header():
     if hasattr(settings, 'ADMIN_HEADER_TITLE'):
         get_site_title = settings.ADMIN_HEADER_TITLE
     return get_site_title
+
+@register.assignment_tag
+def get_file_detail(adminform, field):
+    field_data = adminform.form.initial[field]
+    field_name = type(field_data).__name__
+    if field_name == 'ImageFieldFile':
+        filename, file_extension = os.path.splitext(field_data.url)
+        return {'type':'image','width':field_data.width,'height':field_data.height,'url':field_data.url,'size':field_data.size,'extension':file_extension}
+    if field_name == 'FieldFile':
+        filename, file_extension = os.path.splitext(field_data.url)
+        return {'type':'file','url':field_data.url,'size':field_data.size,'extension':file_extension}
+    return field

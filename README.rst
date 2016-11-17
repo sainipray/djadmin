@@ -18,6 +18,10 @@ Overview
 
 - Admin Header Title - Change django admin header title
 
+- Image preview on change form if form has Image field
+
+- Added "Next" and "Prev" for change form. It will display when model have 2 or more rows data and model has default django primary key field "id"
+
 Documentation
 =============
 

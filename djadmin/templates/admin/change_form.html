@@ -57,6 +57,25 @@
         </ul>
          </div>
     {% endif %}{% endif %}
+    {% if change %}
+        {% for field in adminform.form.initial %}
+            {% get_file_detail adminform field as detail %}
+            {% if detail.url %}
+                 <div class="card-panel">
+                <div class="card-image center">
+                    {% if detail.type == "image" %}
+                    <img class="materialboxed" src="{{ detail.url }}" width="{{ detail.width }}" alt="">
+                        <p class="header {{ request.ADMIN_COLOR_THEME }}-text ">{{ field }}</p>
+                        <h5 class="card-stats-number ">{{ detail.height }}x{{ detail.width }} | {{ detail.size|filesizeformat  }} | {{ detail.extension }} file</h5>
+                    {% else %}
+                        <a href="{{ detail.url }}" target="_blank">{{ field }} Download</a>
+                        <h5 class="card-stats-number center">{{ detail.size|filesizeformat  }} | {{ detail.extension }} file</h5>
+                    {% endif %}
+                </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
