@@ -1,8 +1,8 @@
-{% load custom %}
+{% load custom i18n  %}
  {% admin_color_theme as ADMIN_COLOR_THEME %}
 {% if show %}
     <div class="card-panel">
-        <h5 class="header2">Date Hierarchy</h5>
+        <h4 class="{{ ADMIN_COLOR_THEME }}-text">{% trans 'Date Hierarchy' %}</h4>
         <div class="xfull">
             <ul class="toplinks">
                 {% if back %}
