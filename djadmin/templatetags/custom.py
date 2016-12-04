@@ -6,7 +6,7 @@ from django.apps import apps
 from django.contrib.admin.models import LogEntry,ContentType
 from django.db.models import Q
 
-from djadmin.models import Visitor
+from ..models import Visitor
 
 register = template.Library()
 from django.conf import settings

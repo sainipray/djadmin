@@ -5,9 +5,9 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template import Library
 
-from djadmin.templatetags.base import AdminReadonlyField, Inline
-from djadmin.templatetags.base import Layout, Fieldset, Row
-from djadmin.templatetags.compat import simple_tag
+from .base import AdminReadonlyField, Inline
+from .base import Layout, Fieldset, Row
+from .compat import simple_tag
 
 register = Library()
 

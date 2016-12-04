@@ -10,9 +10,9 @@ from django.template.base import Node, TemplateSyntaxError, Variable, token_kwar
 from django.utils import formats
 from django.utils.encoding import force_text
 
-from djadmin.templatetags.base import Field
+from .base import Field
 # from ..widgets import SelectDateWidget
-from djadmin.templatetags.djadmin_form import FormPartNode, WidgetAttrNode, _render_parts
+from .djadmin_form import FormPartNode, WidgetAttrNode, _render_parts
 
 register = Library()
 

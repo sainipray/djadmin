@@ -11,7 +11,7 @@ from django.template.loader import get_template
 from django.template.loader_tags import IncludeNode
 from django.utils.safestring import mark_safe
 
-from djadmin.templatetags.compat import context_flatten
+from .compat import context_flatten
 
 register = Library()
 
