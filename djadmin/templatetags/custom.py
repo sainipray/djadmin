@@ -71,7 +71,7 @@ def history_of_app(app_label,user):
     q = Q()
     for model in models:
         q |= Q(content_type= model.pk)
-    log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('action_time')[:10]
+    log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
     return log_list
 
 @register.assignment_tag
@@ -85,10 +85,14 @@ def get_site_header():
 def get_file_detail(adminform, field):
     field_data = adminform.form.initial[field]
     field_name = type(field_data).__name__
-    if field_name == 'ImageFieldFile':
-        filename, file_extension = os.path.splitext(field_data.url)
-        return {'type':'image','width':field_data.width,'height':field_data.height,'url':field_data.url,'size':field_data.size,'extension':file_extension}
-    if field_name == 'FieldFile':
-        filename, file_extension = os.path.splitext(field_data.url)
-        return {'type':'file','url':field_data.url,'size':field_data.size,'extension':file_extension}
-    return field
+    try:
+        if field_name == 'ImageFieldFile':
+            filename, file_extension = os.path.splitext(field_data.url)
+            return {'type':'image','width':field_data.width,'height':field_data.height,'url':field_data.url,'size':field_data.size,'extension':file_extension}
+        if field_name == 'FieldFile':
+            filename, file_extension = os.path.splitext(field_data.url)
+            return {'type':'file','url':field_data.url,'size':field_data.size,'extension':file_extension}
+        return field
+    except IOError:
+        pass
+

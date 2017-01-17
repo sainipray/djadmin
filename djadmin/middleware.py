@@ -1,3 +1,4 @@
+from distutils.version import StrictVersion as Version
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.functional import SimpleLazyObject
@@ -6,9 +7,11 @@ from .util import get_user_agent
 import json
 from djadmin.colors import colors
 
+if Version(django.get_version()) >= Version('1.10.0'):
+    from django.utils.deprecation import MiddlewareMixin as object
 
 
-class DJMiddleware(MiddlewareMixin):
+class DJMiddleware(object):
     # A middleware that adds a "user_agent" object to request
     def process_request(self, request):
         # It is use for find user agent and add in request
