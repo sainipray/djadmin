@@ -1,9 +1,11 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
+
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
 class Visitor(models.Model):
-    name = models.ForeignKey(User, null=True)
+    name = models.ForeignKey(AUTH_USER_MODEL, null=True)
     city = models.CharField(max_length=255, null=True)
     state = models.CharField(max_length=50, null=True)
     country = models.CharField(max_length=50, null=True)

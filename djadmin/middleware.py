@@ -1,11 +1,12 @@
 from distutils.version import StrictVersion as Version
+
+import django
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
-from django.utils.functional import SimpleLazyObject
 from django.contrib.admin.sites import AdminSite
-from .util import get_user_agent
-import json
+from django.utils.functional import SimpleLazyObject
+
 from djadmin.colors import colors
+from .util import get_user_agent
 
 if Version(django.get_version()) >= Version('1.10.0'):
     from django.utils.deprecation import MiddlewareMixin as object
