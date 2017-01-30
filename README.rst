@@ -78,12 +78,7 @@ Documentation
       from main.models import Book
       admin.site.register(Book,DjadminMixin)
 
-    After that you will see DjadminMixin Inherit model name in "DjadmiModelSetting" of admin like below snapshot.
-
-    .. image:: .screen5.png
-       :width: 400px
-
-    then change field values with given field.You will get field to show
+    After that you will see DjadminMixin Inherit model name in "DjadmiModelSetting" of admin like below snapshot then change field values with given field.You will get field to show
     Note: If any field already define in your admin class of model then that field value in DjadmiModelSetting will not work for field.
 
    * Add 'DJADMIN_FIELD_DEPTH' for define field depth.When any model has ForeignKey relation with another model and next model also has Foreignkey relation with another that define relation depth.default = 1 ::
@@ -134,6 +129,9 @@ Screenshot
    :width: 400px
 
 .. image:: .screen4.png
+   :width: 400px
+
+.. image:: .screen5.png
    :width: 400px
 
 License
