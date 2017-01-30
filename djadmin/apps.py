@@ -12,6 +12,6 @@ class ActivityAppConfig(AppConfig):
     name = 'djadmin'
 
     def ready(self):
-        import signals
+        import djadmin.signals
         if getattr(settings, 'DJADMIN_DYNAMIC_FIELD_DISPLAY', False):
             post_migrate.connect(DjadminModelSettings, sender=self)
