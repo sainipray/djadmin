@@ -19,183 +19,195 @@
 {% endblock %}
 {% block  navbar-fixed %} navbar-fixed{% endblock %}
 {% block content %}
-    <div class="card-panel">
-        <ul class="collection with-header">
-            <li class="collection-header {{ request.ADMIN_COLOR_THEME }} white-text">
-                <h5>{% trans 'Models' %}</h5>
-            </li>
-        </ul>
-        <div class="row">
-            {% for app in available_apps %}
-                {% for model in app.models %}
-                    <a href="{{ model.admin_url }}">
-                        <div class="col l3 m6 s12">
-                            <div class="card hoverable {% cycle 'cyan' 'amber' 'green' 'pink' 'teal' 'red' 'light-blue' 'purple' 'blue-grey' as rowcolors %}">
-                                <div class="card-content white-text center-align">
-                                    <p class="card-title">{{ app.app_label|cal_total:model.object_name }}</p>
-                                    <p>{{ app.app_label|capfirst }} : - {{ model.name }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            {% endfor %}
-        </div>
-        <div class="divider"></div>
-        {% visitors as visitor %}
-            <div class="row" id="card-visitor">
-                <ul class="collection with-header">
-                    <li class="collection-header {{ request.ADMIN_COLOR_THEME }} white-text">
-                        <h5>{% trans "Login status" %}</h5>
-                    </li>
-                </ul>
-                <ul class="collapsible collapsible-accordion col l6 m12 s12" data-collapsible="accordion">
-                    {% for visit in visitor %}
-                        <li>
-                            <div class="collapsible-header">
-                                <div class="col l1 {{ visit.device_type }} hide-on-med-and-down"></div>
-                                <div class="col l4"> {{ visit.os_info }} {{ visit.device_type }}</div>
-                                <div class="col l6 hide-on-med-and-down">{{ visit.visit_datetime|date }} {{ visit.visit_datetime|time }}</div>
-                            </div>
-                            <div class="collapsible-body">
-                                <ul id="last-visits" class="collection z-depth-1 ">
-                                    <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
-                                        <div class="row">
-                                            <div class="col s5"><i class="mdi-navigation-arrow-forward"></i> Name</div>
-                                            <div class="col s7  right-align">{{ visit.name|capfirst }}</div>
-                                        </div>
-                                    </li>
-                                    <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
-                                        <div class="row">
-                                            <div class="col s5"><i class="mdi-navigation-arrow-forward"></i> Browser
-                                            </div>
-                                            <div class="col s7 right-align">{{ visit.browser }} {{ visit.browser_version }}</div>
-                                        </div>
-                                    </li>
-                                    <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
-                                        <div class="row">
-                                            <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i> OS</div>
-                                            <div class="col s7 right-align">{{ visit.os_info }} {{ visit.os_info_version }} {{ visit.device_type }}<br>
-                                                <div class=" col s5 right {{ visit.device_type }}"></div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    {% if not visit.device_name == "Other" %}
-                                        <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
-                                            <div class="row">
-                                                <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i> Device
-                                                </div>
-                                                <div class="col s7 right-align ">{{ visit.device_name }}, {{ visit.device_name_brand }}, {{ visit.device_name_model }}</div>
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                    {% if visit.city %}
-                                        <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
-                                            <div class="row">
-                                                <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i>Location</div>
-                                                <div class="col s7 right-align ">{{ visit.city }}, {{ visit.state }}, {{ visit.country }}<br>
-                                                    <div class=" col s12 right">{{ visit.ipaddress }}</div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <div class="col l6 s12 m12">
+        <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                        class="mdi-navigation-apps white-text"></i>{% trans 'Models' %}</div>
+                <div class="collapsible-body">
                     <div class="row">
-                        <canvas id="doughnut" width="200" height="200"></canvas>
+                        {% for app in available_apps %}
+                            <div class="collection">
+                                <a href="{{ app.app_url }}" class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text center">{{ app.app_label|capfirst }} <span class="badge white {{ request.ADMIN_COLOR_THEME }}-text">{{ app.models|length }}</span></a>
+                                   {% for model in app.models %}
+                                        <a href="{{ model.admin_url }}">
+                                            <div class="col l3 m6 s12">
+                                                <div title=" {{ model.name }}" class="tooltip card hoverable {% cycle 'cyan' 'amber' 'green' 'pink' 'teal' 'red' 'light-blue' 'purple' 'indigo' 'blue-grey' as rowcolors %}">
+                                                    <div class="card-content white-text center-align">
+                                                        <p class="card-title no-padding">{{ app.app_label|cal_total:model.object_name }}</p>
+                                                        <p class="no-padding truncate">{{ model.name }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
-            </div>
-            <div class="divider"></div>
-    </div>
+            </li>
+            {% visitors as visitor %}
+            <li>
+                <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text "><i
+                        class="mdi-device-dvr white-text"></i>{% trans "Login status" %}</div>
+                <div class="collapsible-body">
+                <div class="row">
+                    <ul class="collapsible collapsible-accordion col l6 m12 s12" id="card-visitor" data-collapsible="accordion">
+                        {% for visit in visitor %}
+                            <li>
+                                <div class="collapsible-header">
+                                    <div class="col l1 {{ visit.device_type }} hide-on-med-and-down"></div>
+                                    <div class="col l4"> {{ visit.os_info }} {{ visit.device_type }}</div>
+                                    <div class="col l6 hide-on-med-and-down">{{ visit.visit_datetime|date }} {{ visit.visit_datetime|time }}</div>
+                                </div>
+                                <div class="collapsible-body">
+                                    <ul id="last-visits" class="collection z-depth-1 ">
+                                        <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
+                                            <div class="row">
+                                                <div class="col s5"><i class="mdi-navigation-arrow-forward"></i> Name
+                                                </div>
+                                                <div class="col s7  right-align">{{ visit.name|capfirst }}</div>
+                                            </div>
+                                        </li>
+                                        <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
+                                            <div class="row">
+                                                <div class="col s5"><i class="mdi-navigation-arrow-forward"></i> Browser
+                                                </div>
+                                                <div class="col s7 right-align">{{ visit.browser }} {{ visit.browser_version }}</div>
+                                            </div>
+                                        </li>
+                                        <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
+                                            <div class="row">
+                                                <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i> OS
+                                                </div>
+                                                <div class="col s7 right-align">{{ visit.os_info }} {{ visit.os_info_version }} {{ visit.device_type }}<br>
+                                                    <div class=" col s5 right {{ visit.device_type }}"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% if not visit.device_name == "Other" %}
+                                            <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
+                                                <div class="row">
+                                                    <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i>
+                                                        Device
+                                                    </div>
+                                                    <div class="col s7 right-align ">{{ visit.device_name }}, {{ visit.device_name_brand }}, {{ visit.device_name_model }}</div>
+                                                </div>
+                                            </li>
+                                        {% endif %}
+                                        {% if visit.city %}
+                                            <li class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text">
+                                                <div class="row">
+                                                    <div class="col s5 "><i class="mdi-navigation-arrow-forward"></i>Location
+                                                    </div>
+                                                    <div class="col s7 right-align ">{{ visit.city }}, {{ visit.state }}, {{ visit.country }}<br>
+                                                        <div class=" col s12 right">{{ visit.ipaddress }}</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="col l6 s12 m12">
+                        <div class="row">
+                            <canvas id="doughnut" width="200" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </li>
+        </ul>
 {% endblock %}
 {% block sidebar %}
-    <div class="card-panel">
-        <h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans 'Recent Actions' %}</h5>
-        <div class="divider"></div>
-        <h6 class="header2  {{ request.ADMIN_COLOR_THEME }}-text"><b>{% trans 'My Actions' %}</b></h6>
-        {% load log %}
-        {% get_admin_log 10 as admin_log for_user user %}
-        {% if not admin_log %}
-            <p>{% trans 'None available' %}</p>
-        {% else %}
-            <div class="row">
-                {% for entry in admin_log %}
-                    <div class="divider"></div>
-                    <div class="row sidebar-padding">
-                        <div class="col s7 grey-text darken-1">
-                            <i class="{% if entry.is_addition %}mdi-content-add{% endif %}{% if entry.is_change %}mdi-image-edit{% endif %}{% if entry.is_deletion %}mdi-action-delete{% endif %}"></i>
-                            {% if entry.is_deletion or not entry.get_admin_url %}
-                                {{ entry.object_repr }}
-                            {% else %}
-                                <a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
-                            {% endif %}
-                        </div>
-                        {% if entry.content_type %}
-                            <div class="col s5 grey-text text-darken-4 right-align">
-                                {% filter capfirst %}
-                                    {{ entry.content_type }}{% endfilter %}
+    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                    class="mdi-av-recent-actors white-text"></i> {% trans 'Recent Actions' %}</div>
+            <div class="collapsible-body">
+                {% load log %}
+                {% get_admin_log 10 as admin_log for_user user %}
+                {% if not admin_log %}
+                    <p>{% trans 'None available' %}</p>
+                {% else %}
+                    <div class="row">
+                        {% for entry in admin_log %}
+                            <div class="divider"></div>
+                            <div class="row sidebar-padding">
+                                <div class="col s7 grey-text darken-1">
+                                    <i class="{% if entry.is_addition %}mdi-content-add-box green-text{% endif %}{% if entry.is_change %}mdi-image-edit yellow-text{% endif %}{% if entry.is_deletion %}mdi-action-delete red-text{% endif %}"></i>
+                                    {% if entry.is_deletion or not entry.get_admin_url %}
+                                        {{ entry.object_repr }}
+                                    {% else %}
+                                        <a class="{{ request.ADMIN_COLOR_THEME }}-text"
+                                           href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                                    {% endif %}
+                                </div>
+                                {% if entry.content_type %}
+                                    <div class="col s5 grey-text text-darken-4 right-align tooltip" title="{{ entry.content_type|capfirst }}">
+                                        {% filter capfirst %}
+                                            {{ entry.content_type|capfirst }}
+                                        {% endfilter %}
+                                    </div>
+                                {% else %}
+                                    <div class="col s7 grey-text text-darken-4 right-align">
+                                        {% trans 'Unknown content' %}
+                                    </div>
+                                {% endif %}
                             </div>
-                        {% else %}
-                            <div class="col s7 grey-text text-darken-4 right-align">
-                                {% trans 'Unknown content' %}
-                            </div>
-                        {% endif %}
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                {% endif %}
             </div>
-        {% endif %}
-    </div>
+        </li>
+    </ul>
 {% endblock %}
 {% block extrajs %}
-{% if available_apps %}
-    {% calc_visitors as calc_visitor %}
-    <script type="text/javascript" src="{% static 'admin/js/packages/graph/Chart.bundle.js' %}"></script>
-    <script type="text/javascript">
-        var config = {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [
-                        {{ calc_visitor.mobile }},
-                        {{ calc_visitor.tablet }},
-                        {{ calc_visitor.pc }},
-                        {{ calc_visitor.unknown }}
+    {% if available_apps %}
+        {% calc_visitors as calc_visitor %}
+        <script type="text/javascript" src="{% static 'admin/js/packages/graph/Chart.bundle.js' %}"></script>
+        <script type="text/javascript">
+            var config = {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [
+                            {{ calc_visitor.mobile }},
+                            {{ calc_visitor.tablet }},
+                            {{ calc_visitor.pc }},
+                            {{ calc_visitor.unknown }}
+                        ],
+                        backgroundColor: [
+                            "#f44336",
+                            "#9c27b0",
+                            "#3f51b5",
+                            "#2196f3"
+                        ],
+                        label: 'Dataset 1'
+                    }
                     ],
-                    backgroundColor: [
-                        "#f44336",
-                        "#9c27b0",
-                        "#3f51b5",
-                        "#2196f3"
-                    ],
-                    label: 'Dataset 1'
-                }
-                ],
-                labels: ['Mobile', 'Tablet', 'PC', 'Other']
-            },
-            options: {
-                responsive: true,
-                legend: {
-                    position: 'bottom',
+                    labels: ['Mobile', 'Tablet', 'PC', 'Other']
                 },
-                title: {
-                    display: true,
-                    text: 'User login details'
-                },
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'User login details'
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
                 }
-            }
-        };
-        window.onload = function () {
-            var ctx = document.getElementById("doughnut").getContext("2d");
-            window.myDoughnut = new Chart(ctx, config);
-        };
-    </script>
+            };
+            window.onload = function () {
+                var ctx = document.getElementById("doughnut").getContext("2d");
+                window.myDoughnut = new Chart(ctx, config);
+            };
+        </script>
     {% endif %}
 {% endblock %}

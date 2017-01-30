@@ -2,14 +2,21 @@
 {% load i18n %}
 
 {% block object-tools-items %}
-     <div class="card-panel">
-     <h4 class="{{ request.ADMIN_COLOR_THEME }}-text">{% trans 'Database' %}</h4>
-    <a href="import/" class="historylink">
-        <blockquote><h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans "Import" %}</h5></blockquote>
-    </a>
-    <a href="export/{{ cl.get_query_string }}" class="historylink">
-        <blockquote><h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans "Export" %}</h5></blockquote>
-    </a>
-    {{ block.super }}
-    </div>
+    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                    class="mdi-notification-sd-card white-text"></i> {% trans 'Database' %}</div>
+            <div class="collapsible-body">
+                <a href="import/" class="historylink">
+                    <blockquote><h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans "Import" %}</h5>
+                    </blockquote>
+                </a>
+                <a href="export/{{ cl.get_query_string }}" class="historylink">
+                    <blockquote><h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans "Export" %}</h5>
+                    </blockquote>
+                </a>
+                {{ block.super }}
+            </div>
+        </li>
+    </ul>
 {% endblock %}

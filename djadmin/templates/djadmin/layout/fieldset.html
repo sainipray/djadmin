@@ -1,9 +1,12 @@
 {% load djadmin_inline_form %}
 <div class="row">
-    <ul class="collection with-header">
-        <li class="collection-header {{ request.ADMIN_COLOR_THEME }} white-text">
-            <h5>{{ parent.label|default:"" }}</h5>
+    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                    class="mdi-editor-format-line-spacing white-text"></i>{{ parent.label|default:"" }}</div>
+            <div class="collapsible-body">
+                {% for element in parent.elements %}{% render element %}{% endrender %}{% endfor %}
+            </div>
         </li>
     </ul>
-    {% for element in parent.elements %}{% render element %}{% endrender %}{% endfor %}
 </div>

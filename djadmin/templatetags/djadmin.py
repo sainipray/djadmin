@@ -17,7 +17,7 @@ CL_VALUE_RE = re.compile('value="(.*)\"')
 def get_admin_site():
     site_module = getattr(
         settings,
-        'MATERIAL_ADMIN_SITE',
+        'DJADMIN_SITE',
         'django.contrib.admin.site'
     )
     mod, inst = site_module.rsplit('.', 1)
@@ -75,13 +75,6 @@ def fieldset_layout(adminform, inline_admin_formsets):
 
 
 def admin_related_field_urls(bound_field):
-    """
-    Construct add/remove/change links for admin related field.
-
-    Usage:
-
-        {% admin_related_field_urls bound_field as bound_field_urls %}
-    """
     from django.contrib.admin.views.main import IS_POPUP_VAR, TO_FIELD_VAR
 
     rel_widget = bound_field.field.widget

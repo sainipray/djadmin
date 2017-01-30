@@ -21,7 +21,7 @@
             {% if group %}</optgroup>{% endif %}{% endfor %}{% endpart %}
         </select>
         {% endpart %}
-        {% part field help_text %}{% if field.help_text %}
+        {% part field.help_text %}{% if field.help_text %}
             <small class="help-block">{{ bound_field.help_text }}</small>
         {% endif %}{% endpart %}{% part field errors %}
         {% if bound_field.errors %}

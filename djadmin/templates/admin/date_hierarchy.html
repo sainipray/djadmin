@@ -1,18 +1,28 @@
 {% load custom i18n  %}
  {% admin_color_theme as ADMIN_COLOR_THEME %}
 {% if show %}
-    <div class="card-panel">
-        <h4 class="{{ ADMIN_COLOR_THEME }}-text">{% trans 'Date Hierarchy' %}</h4>
-        <div class="xfull">
-            <ul class="toplinks">
-                {% if back %}
-                    <a href="{{ back.link }}" class="date-back {{ ADMIN_COLOR_THEME }}-text"><blockquote><h5 class="header2">&lsaquo; {{ back.title }}</h5></blockquote></a>
-                {% endif %}
-                {% for choice in choices %}
-                   {% if choice.link %} <a href="{{ choice.link }}" class="date-back {{ ADMIN_COLOR_THEME }}-text"><blockquote><h5 class="header2">{{ choice.title }}</h5></blockquote></a>{% endif %}
-                {% endfor %}
-            </ul>
-            <br class="clear"/>
-        </div>
-    </div>
+    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header active {{ ADMIN_COLOR_THEME }} white-text"><i
+                    class="mdi-editor-insert-invitation white-text"></i> {% trans 'Date Hierarchy' %}</div>
+            <div class="collapsible-body">
+                <div class="collection">
+                    <div class="xfull">
+                        <ul class="toplinks">
+                            {% if back %}
+                                <a href="{{ back.link }}"
+                                   class=" collection-item date-back {{ ADMIN_COLOR_THEME }}-text">&lsaquo; {{ back.title }}</a>
+                            {% endif %}
+                            {% for choice in choices %}
+                                {% if choice.link %}<a href="{{ choice.link }}"
+                                                       class=" collection-item date-back {{ ADMIN_COLOR_THEME }}-text">{{ choice.title }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <br class="clear"/>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
 {% endif %}

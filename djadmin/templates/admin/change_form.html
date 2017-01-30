@@ -30,51 +30,84 @@
 
 {% block sidebar %}
     {% if change %}{% if not is_popup %}
-        <div class="card-panel">
-        {% next_prev original as data %}
-            {% if data.next or data.prev %}
-                 <ul class="object-tools">
-                <blockquote>
-                 <h5 class="">
-                    {% if data.prev %}
-                      <a href="{% url opts|admin_urlname:'change' data.prev|admin_urlquote %}" class="{{ request.ADMIN_COLOR_THEME }}-text"><span class="header2"> < {% trans "Prev" %} </span></a>
-                    {% endif %}
-                    {% if data.next and data.prev %}
-                        <span class="{{ request.ADMIN_COLOR_THEME }}-text">|</span>
-                        {% endif %}
-                    {% if data.next %}
-                        <a href="{% url opts|admin_urlname:'change' data.next|admin_urlquote %}" class="{{ request.ADMIN_COLOR_THEME }}-text"><span class="header2">{% trans "Next" %} > </span></a>
-                    {% endif %}
-                </h5></blockquote>
+        {% for widget in djadmin_card %}
+            <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+                <li>
+                    <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                            class="mdi-action-dashboard white-text"></i> {% trans widget.name %}</div>
+                    <div class="collapsible-body">
+                        <div class="widget-data ">
+                            {{ widget.html|safe }}
+                        </div>
+                    </div>
+                </li>
             </ul>
-            {% endif %}
-        <ul class="object-tools">
-            {% block object-tools-items %}
-                    {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
-                    <a href="{% add_preserved_filters history_url %}" class="historylink"><blockquote><h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans "History" %}</h5></blockquote></a>
-                    {% if has_absolute_url %}<a href="{{ absolute_url }}" class="viewsitelink"><blockquote><h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans "View on site" %}</h5></blockquote></a>{% endif %}
-            {% endblock %}
+        {% endfor %}
+        <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                        class="mdi-action-settings-applications white-text"></i> {% trans 'Tools' %}</div>
+                <div class="collapsible-body">
+                    <div class="collection">
+                        {% next_prev original as data %}
+                        {% if data.next or data.prev %}
+                            <ul class="object-tools">
+                                {% if data.prev %}
+                                    <a href="{% url opts|admin_urlname:'change' data.prev|admin_urlquote %}"
+                                       class="{{ request.ADMIN_COLOR_THEME }}-text collection-item"><i
+                                            class="mdi-image-navigate-before"></i> {% trans "Previous" %}</a>
+                                {% endif %}
+                                {% if data.next %}
+                                    <a href="{% url opts|admin_urlname:'change' data.next|admin_urlquote %}"
+                                       class="{{ request.ADMIN_COLOR_THEME }}-text collection-item">{% trans "Next" %}
+                                        <i class="mdi-image-navigate-next"></i></a>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                        <ul class="object-tools">
+                            {% block object-tools-items %}
+                                {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
+                                <a href="{% add_preserved_filters history_url %}" class="historylink collection-item {{ request.ADMIN_COLOR_THEME }}-text ">
+                                    {% trans "History" %}</a>
+                                {% if has_absolute_url %}
+                                    <a href="{{ absolute_url }}" class="{{ request.ADMIN_COLOR_THEME }}-text viewsitelink collection-item">
+                                        {% trans "View on site" %}</a>{% endif %}
+                            {% endblock %}
+                        </ul>
+                    </div>
+                </div>
+            </li>
         </ul>
-         </div>
     {% endif %}{% endif %}
     {% if change %}
-        {% for field in adminform.form.initial %}
-            {% get_file_detail adminform field as detail %}
-            {% if detail.url %}
-                 <div class="card-panel">
-                <div class="card-image center">
-                    {% if detail.type == "image" %}
-                    <img class="materialboxed" src="{{ detail.url }}" width="{{ detail.width }}" alt="">
-                        <p class="header {{ request.ADMIN_COLOR_THEME }}-text ">{{ field }}</p>
-                        <h5 class="card-stats-number ">{{ detail.height }}x{{ detail.width }} | {{ detail.size|filesizeformat  }} | {{ detail.extension }} file</h5>
-                    {% else %}
-                        <a href="{{ detail.url }}" target="_blank">{{ field }} Download</a>
-                        <h5 class="card-stats-number center">{{ detail.size|filesizeformat  }} | {{ detail.extension }} file</h5>
-                    {% endif %}
-                </div>
-                </div>
-            {% endif %}
-        {% endfor %}
+            {% for field in adminform.form.initial %}
+                {% get_file_detail adminform field as detail %}
+                {% if detail.url %}
+                    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                                class="mdi-navigation-apps white-text"></i>{% trans 'Files' %}</div>
+                        <div class="collapsible-body">
+                            <div class="card-image center card-content">
+                                {% if detail.type == "image" %}
+                                    <img class="materialboxed" src="{{ MEDIA_URL }}{{ detail.url }}"
+                                         width="{{ detail.width }}" alt="">
+                                    <h6 class="header {{ request.ADMIN_COLOR_THEME }}-text ">Field Name : {{ field|capfirst }}</h6>
+                                    <h6 class="card-stats-number ">Dimension : {{ detail.height }}x{{ detail.width }}</h6>
+                                    <h6 class="card-stats-number ">Size : {{ detail.size|filesizeformat }}</h6>
+                                    <h6 class="card-stats-number ">Type : {{ detail.extension }} file</h6>
+                                {% else %}
+                                    <h6 class="header {{ request.ADMIN_COLOR_THEME }}-text ">Field Name : {{ field|capfirst }}</h6>
+                                    <h6 class="card-stats-number center">Size : {{ detail.size|filesizeformat }}</h6>
+                                    <h6 class="card-stats-number center">Type : {{ detail.extension }} file</h6>
+                                    <h6 class="card-stats-number center"><a href="{{ MEDIA_URL }}{{ detail.url }}" target="_blank">{{ field }} Download</a></h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    </ul>
+                {% endif %}
+            {% endfor %}
     {% endif %}
 {% endblock %}
 

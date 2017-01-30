@@ -105,17 +105,38 @@
     </div>
 {% endblock %}
 {% block sidebar %}
+   {% for card in cl.model_admin.djadmin_card %}
+            <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+                <li>
+                    <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                            class="mdi-action-dashboard white-text"></i> {% trans card.name %}</div>
+                    <div class="collapsible-body">
+                        <div class="widget-data ">
+                            {{ card.html|safe }}
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+        {% endfor %}
   {% block filters %}
-{% if cl.has_filters %}
- <div class="card-panel">
-        <h4 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans 'Filter' %}</h4>
- {% for spec in cl.filter_specs %}
-     {% admin_list_filter cl spec %}
- {% endfor %}
-    </div>
+      {% if cl.has_filters %}
+          <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+              <li>
+                  <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                          class="mdi-content-filter-list white-text"></i> {% trans 'Filter' %}</div>
+                  <div class="collapsible-body">
+                      {% for spec in cl.filter_specs %}
+                          {% admin_list_filter cl spec %}
+                      {% endfor %}
+                  </div>
+              </li>
+          </ul>
       {% endif %}
     {% endblock %}
-    {% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
+    {% block date_hierarchy %}
+        {% date_hierarchy cl %}
+    {% endblock %}
 {% endblock %}
 {% block extrajs %}
 <script type="text/javascript">

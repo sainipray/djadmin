@@ -123,7 +123,7 @@ class FormPartNode(Node):
         self.varname = None
         if len(bits) > 3:
             if bits[3] != 'asvar':
-                raise TemplateSyntaxError('Forth argument should be asvar, got {}', format(bits[3]))
+                raise TemplateSyntaxError('Forth argument should be as var, got {}', format(bits[3]))
             if len(bits) < 4:
                 raise TemplateSyntaxError('Variable name not provided')
             else:
@@ -167,15 +167,6 @@ class FormPartNode(Node):
 
 @register.tag('attrs')
 class WidgetAttrsNode(Node):
-    """
-    Renders attrs for the html tag.
-
-    <input{% attrs boundfield 'widget' default field.widget.attrs %}
-        id="id_{{ bound_field.name }}"
-        class="{% if bound_field.errors %}invalid{% endif %}"
-    {% endattrs %}>
-    """
-
     def __init__(self, parser, token):
         bits = token.split_contents()
 

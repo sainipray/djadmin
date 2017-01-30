@@ -18,70 +18,75 @@
     {% endblock %}
 {% endif %}
 {% block content %}
-    <div class="card-panel">
-
-        <ul class="collection with-header">
-            <li class="collection-header {{ request.ADMIN_COLOR_THEME }} white-text">
-                <h5>{{ title }}</h5>
-            </li>
-
-            {% for apps_model in app_list %}
-                {% for app in apps_model.models %}
-                    <li class="collection-item">
-                        <div><a href="{{ app.admin_url }}" >{{ app.name }}</a>
-                            <a href="{{ app.admin_url }}" class="secondary-content ">
-                                <i class="mdi-content-create red-text">Change</i>
-                            </a>
-                            {% if app.add_url %}
-                            <a href="{{ app.add_url }}" class="secondary-content {{ request.ADMIN_COLOR_THEME }}-text">
-                                <i class="mdi-content-add {{ request.ADMIN_COLOR_THEME }}-text">Add</i>
-                            </a>
-                            {% endif %}
-                        </div>
-                    </li>
-                {% endfor %}
-            {% endfor %}
-        </ul>
-    </div>
+    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                    class="mdi-navigation-apps white-text"></i> {{ title }}</div>
+            <div class="collapsible-body">
+                <ul class="collection">
+                    {% for apps_model in app_list %}
+                        {% for app in apps_model.models %}
+                            <li class="collection-item">
+                                <div><a href="{{ app.admin_url }}">{{ app.name }}</a>
+                                    <a href="{{ app.admin_url }}" class="secondary-content ">
+                                        <i class="mdi-content-create red-text">Change</i>
+                                    </a>
+                                    {% if app.add_url %}
+                                        <a href="{{ app.add_url }}"
+                                           class="secondary-content {{ request.ADMIN_COLOR_THEME }}-text">
+                                            <i class="mdi-content-add {{ request.ADMIN_COLOR_THEME }}-text">Add</i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </li>
+    </ul>
 {% endblock %}
 
 {% block sidebar %}
     {% history_of_app app_label user as action_list %}
-       <div class="card-panel">
-        <h5 class="header2 {{ request.ADMIN_COLOR_THEME }}-text">{% trans 'Recent Actions' %} </h5>
-        <div class="divider"></div>
-        <h6 class="header2 {{ request.ADMIN_COLOR_THEME }}-text"><b>{% trans 'My Actions' %}</b></h6>
-        {% if not action_list %}
-            <p>{% trans 'None available' %}</p>
-        {% else %}
-            <div class="row">
-                {% for entry in action_list %}
-                    <div class="divider"></div>
-                    <div class="row sidebar-padding">
-                        <div class="col s7 grey-text darken-1">
-                            <i class="{% if entry.is_addition %}mdi-content-add{% endif %}{% if entry.is_change %}mdi-image-edit{% endif %}{% if entry.is_deletion %}mdi-action-delete{% endif %}"></i>
-                            {% if entry.is_deletion or not entry.get_admin_url %}
-                                {{ entry.object_repr }}
-                            {% else %}
-                                <a class="{{ request.ADMIN_COLOR_THEME }}-text"
-                                   href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
-                            {% endif %}
-                        </div>
-                        {% if entry.content_type %}
-                            <div class="col s5 grey-text text-darken-4 right-align">
-                                {% filter capfirst %}
-                                    {{ entry.content_type }}{% endfilter %}
-                            </div>
-                        {% else %}
-                            <div class="col s7 grey-text text-darken-4 right-align">
-                                {% trans 'Unknown content' %}
-                            </div>
+    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                    class="mdi-av-recent-actors white-text"></i> {% trans 'Recent Actions' %}</div>
+            <div class="collapsible-body">
+                {% if not action_list %}
+                    <p>{% trans 'None available' %}</p>
+                {% else %}
+                    <div class="row">
+                        {% for entry in action_list %}
+                            <div class="divider"></div>
+                            <div class="row sidebar-padding">
+                                <div class="col s7 grey-text darken-1">
+                                    <i class="{% if entry.is_addition %}mdi-content-add-box green-text{% endif %}{% if entry.is_change %}mdi-image-edit yellow-text{% endif %}{% if entry.is_deletion %}mdi-action-delete red-text{% endif %}"></i>
+                                    {% if entry.is_deletion or not entry.get_admin_url %}
+                                        {{ entry.object_repr }}
+                                    {% else %}
+                                        <a class="{{ request.ADMIN_COLOR_THEME }}-text"
+                                           href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                                    {% endif %}
+                                </div>
+                                {% if entry.content_type %}
+                                    <div class="col s5 grey-text text-darken-4 right-align">
+                                        {% filter capfirst %}
+                                            {{ entry.content_type }}{% endfilter %}
+                                    </div>
+                                {% else %}
+                                    <div class="col s7 grey-text text-darken-4 right-align">
+                                        {% trans 'Unknown content' %}
+                                    </div>
 
-                        {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                {% endif %}
             </div>
-        {% endif %}
-    </div>
+        </li>
+    </ul>
 {% endblock %}
 {% block extrajs %}{% endblock %}

@@ -11,7 +11,6 @@ from django.utils import formats
 from django.utils.encoding import force_text
 
 from .base import Field
-# from ..widgets import SelectDateWidget
 from .djadmin_form import FormPartNode, WidgetAttrNode, _render_parts
 
 register = Library()
