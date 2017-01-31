@@ -17,6 +17,5 @@ env:
 install:
   - pip install Django==$DJANGO_VERSION
   - python setup.py install
-  - python manage.py migrate
 
 script: python manage.py test tests
