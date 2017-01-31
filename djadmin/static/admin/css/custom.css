@@ -17,7 +17,7 @@
     position: fixed;
     width: 100px;
     left: 180px;
-    right: -180px;
+    right: -220px;
     z-index: 999;
     height: auto;
 }
