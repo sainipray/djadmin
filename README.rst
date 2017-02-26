@@ -7,6 +7,12 @@ Djadmin is a django admin theme
 .. image:: https://img.shields.io/pypi/v/djadmin.svg
     :target: https://pypi.python.org/pypi/djadmin
 
+.. image:: https://api.travis-ci.org/sainipray/djadmin.svg
+    :target: https://travis-ci.org/sainipray/djadmin/
+
+.. image:: https://img.shields.io/pypi/pyversions/djadmin.svg
+    :target: https://travis-ci.org/sainipray/djadmin/
+
 Overview
 ========
 
@@ -72,7 +78,7 @@ Documentation
       class BookAdmin(DjadminMixin):
           pass
 
-   OR::
+   * Another way for register DjadminMixin to Model ::
 
       from djadmin.mixins import DjadminMixin
       from main.models import Book

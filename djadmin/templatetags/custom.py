@@ -68,11 +68,13 @@ def admin_color_theme():
 
 @register.assignment_tag
 def history_of_app(app_label, user):
-    models = ContentType.objects.filter(app_label=app_label).select_related()
-    q = Q()
-    for model in models:
-        q |= Q(content_type=model.pk)
-    log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
+    log_list = []
+    if hasattr(user, 'pk'):
+        models = ContentType.objects.filter(app_label=app_label).select_related()
+        q = Q()
+        for model in models:
+            q |= Q(content_type=model.pk)
+        log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
     return log_list
 
 

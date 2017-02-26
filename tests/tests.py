@@ -24,6 +24,16 @@ class Test(TestCase):
         self.user.is_staff = True
         self.user.save()
 
-    def test_entries_access(self):
+    def test_page_access(self):
         response = self.c.get(reverse('admin:index'))
         self.assertEqual(response.status_code, 302)
+
+    def test_login_and_page(self):
+        self.c.login(username='tests', password='tests')
+        self.assertEqual(self.user.id, 1)
+        response = self.c.get(reverse('admin:app_list', kwargs=({'app_label': 'auth'})))
+        self.assertEqual(response.status_code, 200)
+
+    def test_logout_and_delete(self):
+        self.client.logout()
+        self.user.delete()

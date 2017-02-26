@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static custom %}
+{% load i18n admin_static custom log %}
 
 {% block extrastyle %}{{ block.super }}{% endblock %}
 
@@ -126,7 +126,6 @@
             <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
                     class="mdi-av-recent-actors white-text"></i> {% trans 'Recent Actions' %}</div>
             <div class="collapsible-body">
-                {% load log %}
                 {% get_admin_log 10 as admin_log for_user user %}
                 {% if not admin_log %}
                     <p>{% trans 'None available' %}</p>

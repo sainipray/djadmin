@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 def visitor(sender, user, request, **kwargs):
-    if request.user.is_authenticated():
+    if hasattr(request,'user') and request.user.is_authenticated():
         if request.user_agent.is_mobile:
             device_type = "Mobile"
         elif request.user_agent.is_tablet:

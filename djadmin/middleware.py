@@ -27,9 +27,13 @@ class DJMiddleware(object):
         request.ALLOW_FORGET_PASSWORD_ADMIN = ALLOW_FORGET_PASSWORD_ADMIN
         request.ADMIN_COLOR_THEME_CODE = ADMIN_COLOR_THEME_CODE
         if request.user.is_superuser and getattr(settings, 'DJADMIN_DYNAMIC_FIELD_DISPLAY', False):
-            register_model_list = get_register_model_with_mixin()
-            exist_model_list = DjadminModelSetting.objects.all()
-            if len(register_model_list) > len(exist_model_list):
-                handle_djadmin_field_data(register_model_list, True)  # True = Create
-            elif len(register_model_list) < len(exist_model_list):
-                handle_djadmin_field_data(register_model_list, False)  # False = Delete
+            register_model_object_list = get_register_model_with_mixin()
+            exist_model_object_list = DjadminModelSetting.objects.all()
+            register_model_list = [model.__name__ for model in register_model_object_list]
+            exist_model_list = [str(model.model) for model in exist_model_object_list]
+            create_model_name = [model for model in register_model_list if model not in exist_model_list]
+            delete_model_name = [model for model in exist_model_list if model not in register_model_list]
+            if len(create_model_name):
+                handle_djadmin_field_data(register_model_object_list, True)
+            if len(delete_model_name):
+                handle_djadmin_field_data(register_model_object_list, False)
