@@ -65,7 +65,6 @@ Documentation
    * Now you have successfully install djadmin in your project
 
 - Customization -
-
    * Add 'DJADMIN_DYNAMIC_FIELD_DISPLAY' for Enable Django admin dynamic options for models, After enable this option it's need to "migrate" model. default: False ::
 
        DJADMIN_DYNAMIC_FIELD_DISPLAY = True

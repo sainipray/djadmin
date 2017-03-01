@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import sys
 from distutils.version import StrictVersion as Version
 
 import django
@@ -18,10 +22,18 @@ class DJMiddleware(object):
     def process_request(self, request):
         request.user_agent = SimpleLazyObject(lambda: get_user_agent(request))
 
+        try:
+            admin_color_theme = getattr(settings, 'ADMIN_COLOR_THEME', 'cyan').strip().lower().split(' ')
+            ADMIN_COLOR_THEME = admin_color_theme[0] if len(admin_color_theme) < 2 else '{0} {1}'.format(
+                admin_color_theme[1], admin_color_theme[0])
+            ADMIN_COLOR_THEME_CODE = colors[admin_color_theme[0]][
+                admin_color_theme[1] if len(admin_color_theme) > 1 else 'base']
+        except KeyError:
+            sys.stdout.write('Please use correct color combination like: "purple" or "purple darken-1"\n')
+            raise
+
         ALLOW_FORGET_PASSWORD_ADMIN = getattr(settings, 'ALLOW_FORGET_PASSWORD_ADMIN', False)
-        ADMIN_COLOR_THEME = getattr(settings, 'ADMIN_COLOR_THEME', 'cyan').lower()
         ADMIN_HEADER_TITLE = getattr(settings, 'ADMIN_HEADER_TITLE', 'Django administrator')
-        ADMIN_COLOR_THEME_CODE = colors[ADMIN_COLOR_THEME]["base"]
         AdminSite.site_header = ADMIN_HEADER_TITLE
         request.ADMIN_COLOR_THEME = ADMIN_COLOR_THEME
         request.ALLOW_FORGET_PASSWORD_ADMIN = ALLOW_FORGET_PASSWORD_ADMIN
