@@ -1,25 +1,45 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import django
 import os
 import re
-
 from django import template
 from django.apps import apps
 from django.conf import settings, global_settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import translate_url
 from django.db.models import Q
 from django.template import TemplateSyntaxError
 from django.templatetags.i18n import GetAvailableLanguagesNode
 
+from djadmin import settings as djadmin_settings
 from ..models import Visitor, DjadminModelSetting
 from ..util import get_admin_color_theme
 
 register = template.Library()
 
 CL_VALUE_RE = re.compile('value="(.*)\"')
+
+if django.VERSION >= (1, 9):
+    from django.core.urlresolvers import translate_url
+else:
+    def translate_url(url, lang_code):
+        parsed = urlsplit(path)
+        try:
+            match = resolve(parsed.path)
+        except Resolver404:
+            pass
+        else:
+            to_be_reversed = "%s:%s" % (match.namespace, match.url_name) if match.namespace else match.url_name
+            with override(lang_code):
+                try:
+                    url = reverse(to_be_reversed, args=match.args, kwargs=match.kwargs)
+                except NoReverseMatch:
+                    pass
+                else:
+                    url = urlunsplit((parsed.scheme, parsed.netloc, url, parsed.query, parsed.fragment))
+        return url
 
 
 @register.filter
@@ -68,7 +88,7 @@ def next_prev(Model):
 
 @register.assignment_tag
 def admin_color_theme():
-    admin_color_theme = getattr(settings, 'ADMIN_COLOR_THEME', 'cyan')
+    admin_color_theme = djadmin_settings.ADMIN_COLOR_THEME
     ADMIN_COLOR_THEME = get_admin_color_theme(admin_color_theme)
     return ADMIN_COLOR_THEME
 
@@ -77,18 +97,17 @@ def admin_color_theme():
 def history_of_app(app_label, user):
     models = ContentType.objects.filter(app_label=app_label).select_related()
     q = Q()
+    log_list = None
     for model in models:
         q |= Q(content_type=model.pk)
-    log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
+    if 'pk' in user:
+        log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
     return log_list
 
 
 @register.assignment_tag
 def get_site_header():
-    get_site_title = "Django administrator"
-    if hasattr(settings, 'ADMIN_HEADER_TITLE'):
-        get_site_title = settings.ADMIN_HEADER_TITLE
-    return get_site_title
+    return djadmin_settings.ADMIN_HEADER_TITLE
 
 
 @register.assignment_tag
