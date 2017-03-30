@@ -186,6 +186,7 @@
             var $form = $(this);
             $form.slideUp(0);
             $form.slideDown();
+            $("select").not('.filtered').not('.disabled').not('.material-ignore').material_select();
         }).on('formDeleted', this.opts.form, function() {
             var $form = $(this);
             $form.slideUp();

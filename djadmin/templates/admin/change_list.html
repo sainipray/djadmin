@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_list custom %}
+{% load i18n admin_urls admin_static djadmin admin_list custom %}
 {% block  navbar-fixed %} navbar-fixed{% endblock %}
 {% block extrastyle %}
     {{ block.super }}
@@ -87,8 +87,10 @@
                             {% endif %}
                         </div>
                      </div>
-                    {% result_list cl %}
-                    {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+                    {% result_sortable_list cl %}
+                    <div class="row section margin">
+                        {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+                    </div>
                 {% endblock %}
                 {% block pagination %}{% pagination cl %}{% endblock %}
             </form>
@@ -105,6 +107,17 @@
     </div>
 {% endblock %}
 {% block sidebar %}
+
+    {% if cl.model_admin.djadmin_model_setting %}
+        {% get_pk opts.object_name opts.app_label as djadmin_setting_pk %}
+        <div class="row">
+        <a href="{% url 'admin:djadmin_djadminmodelsetting_change' djadmin_setting_pk  %}"
+           class="waves-effect waves-light col s12 {{ request.ADMIN_COLOR_THEME }} btn-large ">
+            <i class="mdi-editor-border-color right"></i>
+            {% trans 'Change admin options' %}
+        </a>
+        </div>
+    {% endif %}
    {% for card in cl.model_admin.djadmin_card %}
             <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
                 <li>
@@ -114,7 +127,6 @@
                         <div class="widget-data ">
                             {{ card.html|safe }}
                         </div>
-
                     </div>
                 </li>
             </ul>
@@ -139,12 +151,39 @@
     {% endblock %}
 {% endblock %}
 {% block extrajs %}
+<script type="text/javascript" src="{% static 'admin/js/packages/nestable/jquery.nestable.js' %}"></script>
+
 <script type="text/javascript">
 (function($) {
-  $(document).ready(function($) {
-    /*
-      Search form
-     */
+    $(document).ready(function ($) {
+        function sortable(url, data) {
+            $.ajax({
+                url: url,
+                data: data,
+                dataType: 'json',
+                method: "POST",
+                success: function (data) {
+                    if (data.status == 200) {
+                        Materialize.toast('<i class="mdi-navigation-check small "></i>' + data.message, 5000, '{{ request.ADMIN_COLOR_THEME }}-text white')
+                    }
+                }
+            });
+        }
+
+        $("#sortable").sortable({
+            update: function (event, ui) {
+                url = '{% url 'djadmin_sortable' opts.model_name 'update' %}';
+                data = {'sortable': JSON.stringify($("#sortable").sortable("toArray"))};
+                sortable(url, data);
+            }
+        });
+        $('.sortable-reset').click(function () {
+            data = '';
+            url = '{% url 'djadmin_sortable' opts.model_name 'reset' %}';
+            sortable(url, data);
+            location.reload();
+        });
+
     $('#searchbar').keyup(function (e) {
       if(e.keyCode == 13) {
         $("#searchbar_hidden").attr('name', $('#searchbar').data('name'));

@@ -1,13 +1,13 @@
 from setuptools import find_packages,setup
-
+import djadmin
 setup(
-    name='djadmin',
-    version='1.1.4b0',
+    name=djadmin.__name__,
+    version=djadmin.__version__,
     packages=find_packages(),
     url='https://github.com/sainipray/djadmin',
-    author='Neeraj Kumar',
-    author_email='sainineeraj1234@gmail.com',
-    description='Djadmin is a django admin theme',
+    author=djadmin.__author__,
+    author_email=djadmin.__author_email__,
+    description=djadmin.__description__,
     license='MIT',
     include_package_data=True,
     install_requires=[
@@ -16,7 +16,7 @@ setup(
     platforms=['any'],
     zip_safe = False,
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',

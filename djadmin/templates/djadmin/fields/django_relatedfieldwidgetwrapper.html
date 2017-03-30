@@ -6,7 +6,7 @@
 {% render bound_field widget=field.widget.widget %}
     {% part field label %}
     <label for="{{ bound_field.id_for_label }}" class="related-widget-label">
-        <span style="margin-right:5px">{{ bound_field.label }}</span>
+        <b>{{ bound_field.label }}</b>
         {% if bound_field_urls.can_change_related %}
         <a class="related-widget-wrapper-link change-related tooltip"
            data-href-template="{{ bound_field_urls.change_related_template_url }}?{{ bound_field_urls.url_params }}"

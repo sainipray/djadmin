@@ -2,10 +2,23 @@
 <html>
   <head><title>{% trans 'Popup closing...' %}</title></head>
   <body>
+  <!-- Django change it's structure in 1.10 version, So I'm using this condition for use code according django version -->
+  {% if popup_response_data %}
     <script type="text/javascript"
     id="django-admin-popup-response-constants"
             src="{% static "admin/js/popup_response.js" %}"
             data-popup-response="{{ popup_response_data }}">
     </script>
+  {% else %}
+      <script type="text/javascript">
+      {% if action == 'change' %}
+        opener.dismissChangeRelatedObjectPopup(window, "{{ value|escapejs }}", "{{ obj|escapejs }}", "{{ new_value|escapejs }}");
+      {% elif action == 'delete' %}
+        opener.dismissDeleteRelatedObjectPopup(window, "{{ value|escapejs }}");
+      {% else %}
+        opener.dismissAddRelatedObjectPopup(window, "{{ value|escapejs }}", "{{ obj|escapejs }}");
+      {% endif %}
+    </script>
+  {% endif %}
   </body>
 </html>

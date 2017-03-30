@@ -3,8 +3,11 @@
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css"
-          href="{% block stylesheet %}{% static "admin/css/materialize.min.css" %}{% endblock %}"/>
+    {% if LANGUAGE_BIDI %}
+            <link rel="stylesheet" type="text/css" href="{% static "admin/rtl/css/materialize.css" %}"/>
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{% static "admin/css/materialize.min.css" %}"/>
+    {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/custom.css" %}"/>
     {% block extrastyle %}{% endblock %}
     {% block extrahead %}{% endblock %}

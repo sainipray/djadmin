@@ -1,10 +1,42 @@
-from django.conf import settings
-from django.contrib import admin
-from django.db.models import Q
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
-from .models import DjadminField, DjadminModelSetting, DjadminCard
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.db.models import Q
+from django.utils.translation import ugettext as _
+
+from djadmin import settings
+from .models import DjadminField, DjadminModelSetting, DjadminCard, Visitor
+
+User = get_user_model()
 
 LIST_PAGE, FORM_PAGE, = 0, 1
+
+
+class VisitorAdmin(admin.ModelAdmin):
+    list_display = ('name', 'locations', 'device', 'browser', 'ipaddress', 'login_date_time')
+    list_filter = ('city', 'state', 'country', 'visit_datetime', 'device_type', 'browser',)
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def locations(self, obj):
+        return '{0}, {1}, {2}'.format(obj.city, obj.state, obj.country)
+
+    def device(self, obj):
+        return '{0} {1}'.format(obj.os_info, obj.device_type)
+
+    def login_date_time(self, obj):
+        return obj.visit_datetime
+
+    login_date_time.short_description = _('Last Login')
+
+
+admin.site.register(Visitor, VisitorAdmin)
 
 
 class DjadminCardInline(admin.TabularInline):
@@ -16,9 +48,16 @@ class AdminDjangoModelSettings(admin.ModelAdmin):
     inlines = [DjadminCardInline, ]
     fieldsets = (
         (None, {
-            'fields': ('model', 'app_label', 'list_per_page', 'list_max_show_all', 'date_hierarchy',)
+            'fields': ('model', 'app_label',)
         }),
-        (None, {
+        ('Basic', {
+            'fields': ('list_per_page', 'list_max_show_all',
+                       'date_hierarchy', 'actions_on_top', 'actions_on_bottom',)
+        }),
+        ('Permissions', {
+            'fields': ('has_add_permission', 'has_delete_permission', 'has_change_permission',),
+        }),
+        ('Choices', {
             'fields': ('list_display', 'list_display_links', 'list_filter', 'list_editable', 'search_fields',),
         }),
     )
@@ -69,5 +108,5 @@ class AdminDjangoModelSettings(admin.ModelAdmin):
         return super(AdminDjangoModelSettings, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-if getattr(settings, 'DJADMIN_DYNAMIC_FIELD_DISPLAY', False):
+if settings.DJADMIN_DYNAMIC_FIELD_DISPLAY:
     admin.site.register(DjadminModelSetting, AdminDjangoModelSettings)

@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static custom log %}
+{% load i18n admin_static custom %}
 
 {% block extrastyle %}{{ block.super }}{% endblock %}
 
@@ -48,16 +48,17 @@
             {% visitors as visitor %}
             <li>
                 <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text "><i
-                        class="mdi-device-dvr white-text"></i>{% trans "Login status" %}</div>
+                        class="mdi-device-dvr white-text"></i>{% trans "Login status of all users" %}</div>
                 <div class="collapsible-body">
                 <div class="row">
-                    <ul class="collapsible collapsible-accordion col l6 m12 s12" id="card-visitor" data-collapsible="accordion">
+                    <ul class="collapsible collapsible-accordion col l12 m12 s12" id="card-visitor" data-collapsible="accordion">
                         {% for visit in visitor %}
                             <li>
                                 <div class="collapsible-header">
-                                    <div class="col l1 {{ visit.device_type }} hide-on-med-and-down"></div>
-                                    <div class="col l4"> {{ visit.os_info }} {{ visit.device_type }}</div>
-                                    <div class="col l6 hide-on-med-and-down">{{ visit.visit_datetime|date }} {{ visit.visit_datetime|time }}</div>
+                                    <div class="col s1 {{ visit.device_type }} hide-on-med-and-down"></div>
+                                    <div class="col s3"> {{ visit.os_info }} {{ visit.device_type }}</div>
+                                    <div class="col s2"> {{ visit.name|capfirst }}</div>
+                                    <div class="col s4 hide-on-med-and-down">{{ visit.visit_datetime|date }} {{ visit.visit_datetime|time }}</div>
                                 </div>
                                 <div class="collapsible-body">
                                     <ul id="last-visits" class="collection z-depth-1 ">
@@ -126,6 +127,7 @@
             <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
                     class="mdi-av-recent-actors white-text"></i> {% trans 'Recent Actions' %}</div>
             <div class="collapsible-body">
+                {% load log %}
                 {% get_admin_log 10 as admin_log for_user user %}
                 {% if not admin_log %}
                     <p>{% trans 'None available' %}</p>

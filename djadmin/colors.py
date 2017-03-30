@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 colors = {
     "red": {
         "lighten-5": "#ffebee",

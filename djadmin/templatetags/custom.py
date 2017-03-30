@@ -1,15 +1,23 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
 import re
 
 from django import template
 from django.apps import apps
-from django.contrib.admin.models import LogEntry, ContentType
+from django.conf import settings, global_settings
+from django.contrib.admin.models import LogEntry
+from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import translate_url
 from django.db.models import Q
+from django.template import TemplateSyntaxError
+from django.templatetags.i18n import GetAvailableLanguagesNode
 
-from ..models import Visitor
+from ..models import Visitor, DjadminModelSetting
+from ..util import get_admin_color_theme
 
 register = template.Library()
-from django.conf import settings
 
 CL_VALUE_RE = re.compile('value="(.*)\"')
 
@@ -28,7 +36,7 @@ def cal_total(app_label, model_name):
 
 @register.assignment_tag
 def visitors():
-    visitor = Visitor.objects.all().order_by('-visit_datetime')
+    visitor = Visitor.objects.all().order_by('-visit_datetime')[:10]
     return visitor
 
 
@@ -60,21 +68,18 @@ def next_prev(Model):
 
 @register.assignment_tag
 def admin_color_theme():
-    ADMIN_COLOR_THEME = 'cyan'
-    if hasattr(settings, 'ADMIN_COLOR_THEME'):
-        ADMIN_COLOR_THEME = settings.ADMIN_COLOR_THEME.lower()
+    admin_color_theme = getattr(settings, 'ADMIN_COLOR_THEME', 'cyan')
+    ADMIN_COLOR_THEME = get_admin_color_theme(admin_color_theme)
     return ADMIN_COLOR_THEME
 
 
 @register.assignment_tag
 def history_of_app(app_label, user):
-    log_list = []
-    if hasattr(user, 'pk'):
-        models = ContentType.objects.filter(app_label=app_label).select_related()
-        q = Q()
-        for model in models:
-            q |= Q(content_type=model.pk)
-        log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
+    models = ContentType.objects.filter(app_label=app_label).select_related()
+    q = Q()
+    for model in models:
+        q |= Q(content_type=model.pk)
+    log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
     return log_list
 
 
@@ -101,3 +106,35 @@ def get_file_detail(adminform, field):
         return field
     except IOError:
         pass
+
+
+class EmptyNode(template.Node):
+    def render(self, context):
+        return ''
+
+
+@register.tag("get_user_define_available_languages")
+def get_user_define_available_languages(parser, token):
+    if len(settings.LANGUAGES) != len(global_settings.LANGUAGES) and len(settings.LANGUAGES) > 1:
+        args = token.contents.split()
+        if len(args) != 3 or args[1] != 'as':
+            raise TemplateSyntaxError("'get_user_define_available_languages' requires 'as variable' (got %r)" % args)
+        return GetAvailableLanguagesNode(args[2])
+    return EmptyNode()
+
+
+@register.assignment_tag
+def get_pk(model, app_label):
+    pk = 0
+    try:
+        obj = DjadminModelSetting.objects.get(model=model, app_label=app_label)
+        pk = obj.pk
+    except:
+        pass
+    return pk
+
+
+@register.simple_tag(takes_context=True)
+def change_language(context, lang=None, *args, **kwargs):
+    path = context['request'].path
+    return translate_url(path, lang)

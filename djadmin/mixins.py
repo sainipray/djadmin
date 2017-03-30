@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.conf import settings
 from django.contrib import admin
 from six import with_metaclass
 
+from djadmin import settings
 from .models import DjadminModelSetting, DjadminField
 
 LIST_PAGE, FORM_PAGE, = 0, 1
@@ -56,11 +60,13 @@ class DjadminMixin(with_metaclass(RelatedFieldAdminMetaclass, admin.ModelAdmin))
     djadmin_list_editable = None
     djadmin_search_fields = None
     djadmin_date_hierarchy = None
+    djadmin_model_setting = True
+    djadmin_actions_on_bottom = False
+    djadmin_actions_on_top = True
 
     def is_available(self):
-        if hasattr(settings, 'DJADMIN_DYNAMIC_FIELD_DISPLAY'):
-            if settings.DJADMIN_DYNAMIC_FIELD_DISPLAY:
-                return True
+        if settings.DJADMIN_DYNAMIC_FIELD_DISPLAY:
+            return True
         return False
 
     def __init__(self, model, admin_site):
@@ -76,6 +82,9 @@ class DjadminMixin(with_metaclass(RelatedFieldAdminMetaclass, admin.ModelAdmin))
         self.djadmin_list_editable = self.list_editable
         self.djadmin_search_fields = self.search_fields
         self.djadmin_date_hierarchy = self.date_hierarchy
+        self.djadmin_actions_on_top = self.actions_on_top
+        self.djadmin_actions_on_bottom = self.actions_on_bottom
+
         super(DjadminMixin, self).__init__(model, admin_site)
 
     def get_model_object(self, model):
@@ -170,5 +179,40 @@ class DjadminMixin(with_metaclass(RelatedFieldAdminMetaclass, admin.ModelAdmin))
             except Exception as e:
                 self.date_hierarchy = None
 
+        self.actions_on_top = self.djadmin_actions_on_top
+        if self.actions_on_top:
+            self.actions_on_top = ModelsSetting.actions_on_top
+
+        self.actions_on_bottom = self.djadmin_actions_on_bottom
+        if not self.actions_on_bottom:
+            self.actions_on_bottom = ModelsSetting.actions_on_bottom
+
         self.djadmin_card = self.get_djadmin_cards(ModelsSetting, LIST_PAGE)
         return super(DjadminMixin, self).changelist_view(request, extra_context=extra_context)
+
+    def has_add_permission(self, request):
+        context = super(DjadminMixin, self).has_add_permission(request)
+        if not self.is_available():
+            return context
+        if context:
+            ModelsSetting = self.get_model_object(self.model.__name__)
+            context = ModelsSetting.has_add_permission
+        return context
+
+    def has_change_permission(self, request, obj=None):
+        context = super(DjadminMixin, self).has_change_permission(request)
+        if not self.is_available():
+            return context
+        if context:
+            ModelsSetting = self.get_model_object(self.model.__name__)
+            context = ModelsSetting.has_change_permission
+        return context
+
+    def has_delete_permission(self, request, obj=None):
+        context = super(DjadminMixin, self).has_delete_permission(request)
+        if not self.is_available():
+            return context
+        if context:
+            ModelsSetting = self.get_model_object(self.model.__name__)
+            context = ModelsSetting.has_delete_permission
+        return context

@@ -1,44 +1,33 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import sys
-from distutils.version import StrictVersion as Version
-
 import django
-from django.conf import settings
 from django.contrib.admin.sites import AdminSite
 from django.utils.functional import SimpleLazyObject
 
-from .colors import colors
+from djadmin import settings
 from .models import DjadminModelSetting
 from .signals import get_register_model_with_mixin, handle_djadmin_field_data
-from .util import get_user_agent
+from .util import get_user_agent, get_admin_color_theme, get_admin_color_theme_hex_code
 
-if Version(django.get_version()) >= Version('1.10.0'):
-    from django.utils.deprecation import MiddlewareMixin as object
+if django.VERSION >= (1, 10):
+    from django.utils.deprecation import MiddlewareMixin
+else:
+    MiddlewareMixin = object
 
 
-class DJMiddleware(object):
+class DJMiddleware(MiddlewareMixin):
     def process_request(self, request):
         request.user_agent = SimpleLazyObject(lambda: get_user_agent(request))
-
-        try:
-            admin_color_theme = getattr(settings, 'ADMIN_COLOR_THEME', 'cyan').strip().lower().split(' ')
-            ADMIN_COLOR_THEME = admin_color_theme[0] if len(admin_color_theme) < 2 else '{0} {1}'.format(
-                admin_color_theme[1], admin_color_theme[0])
-            ADMIN_COLOR_THEME_CODE = colors[admin_color_theme[0]][
-                admin_color_theme[1] if len(admin_color_theme) > 1 else 'base']
-        except KeyError:
-            sys.stdout.write('Please use correct color combination like: "purple" or "purple darken-1"\n')
-            raise
-
-        ALLOW_FORGET_PASSWORD_ADMIN = getattr(settings, 'ALLOW_FORGET_PASSWORD_ADMIN', False)
-        ADMIN_HEADER_TITLE = getattr(settings, 'ADMIN_HEADER_TITLE', 'Django administrator')
-        AdminSite.site_header = ADMIN_HEADER_TITLE
+        admin_color_theme = settings.ADMIN_COLOR_THEME
+        ADMIN_COLOR_THEME = get_admin_color_theme(admin_color_theme)
+        ADMIN_COLOR_THEME_CODE = get_admin_color_theme_hex_code(admin_color_theme)
+        ALLOW_FORGET_PASSWORD_ADMIN = settings.ALLOW_FORGET_PASSWORD_ADMIN
+        AdminSite.site_header = settings.ADMIN_HEADER_TITLE
         request.ADMIN_COLOR_THEME = ADMIN_COLOR_THEME
         request.ALLOW_FORGET_PASSWORD_ADMIN = ALLOW_FORGET_PASSWORD_ADMIN
         request.ADMIN_COLOR_THEME_CODE = ADMIN_COLOR_THEME_CODE
-        if request.user.is_superuser and getattr(settings, 'DJADMIN_DYNAMIC_FIELD_DISPLAY', False):
+        if request.user.is_superuser and settings.DJADMIN_DYNAMIC_FIELD_DISPLAY:
             register_model_object_list = get_register_model_with_mixin()
             exist_model_object_list = DjadminModelSetting.objects.all()
             register_model_list = [model.__name__ for model in register_model_object_list]
@@ -48,4 +37,5 @@ class DJMiddleware(object):
             if len(create_model_name):
                 handle_djadmin_field_data(register_model_object_list, True)
             if len(delete_model_name):
-                handle_djadmin_field_data(register_model_object_list, False)
+                if settings.DJADMIN_DYNAMIC_DELETE_UNREGISTER_FIELD:
+                    handle_djadmin_field_data(register_model_object_list, False)

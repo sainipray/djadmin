@@ -8,7 +8,7 @@
 {% endif %}
 {% if results %}
 <div class="results">
-<table id="result_list" class="section">
+<table id="result_list" class="section bordered striped ">
 <thead class="{{ ADMIN_COLOR_THEME }} row">
 <tr class="row">
 {% for header in result_headers %}
@@ -26,6 +26,7 @@
        {% if "checkbox" in header.text and  forloop.counter == 1 %}
             <input type="checkbox" class="filled-in" id="action-toggle"/>
             <label for="action-toggle">&nbsp;&nbsp;</label>
+           <a class="sortable-reset tooltip" title="Reset Sortable" ><i class="mdi-navigation-refresh"></i></a>
         {% else %}
            {{ header.text|capfirst }}
            {% endif %}
@@ -35,12 +36,12 @@
 <td class="field-delete white-text tooltip center" title="Delete"><i class="mdi-navigation-cancel small"></i></td>
 </tr>
 </thead>
-<tbody>
+<tbody id="sortable">
 {% for result in results %}
 {% if result.form.non_field_errors %}
     <tr><td colspan="{{ result|length }}">{{ result.form.non_field_errors }}</td></tr>
 {% endif %}
-<tr class="{% cycle 'white' ' grey lighten-4' %}">
+<tr class="items" id="{{ result.0|admin_change_list_value }}">
     {% for item in result %}
         {% if 'action-checkbox' in item and forloop.counter == 1 %}
             <td class="action-checkbox">
@@ -48,6 +49,8 @@
                        id="_selected_action_{{ forloop.parentloop.counter }}" type="checkbox"
                        value="{{ item|admin_change_list_value }}"/>
                 <label for="_selected_action_{{ forloop.parentloop.counter }}">&nbsp;&nbsp;</label>
+                <i class="mdi-action-open-with"></i>
+
             </td>
         {% elif '<img' in item %}
             {% if 'icon-yes' in item %}

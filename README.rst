@@ -16,6 +16,19 @@ Djadmin is a django admin theme
 Overview
 ========
 
+  **"NEW UPDATES"**
+
+- Added Sortable in admin **change list** page.
+
+- Added Language dropdown.
+
+- Added Configuration Page in admin (In Development).
+
+- Added Some fields in DjadminModelSettings Model.
+
+- Fixed Bugs
+
+  **" VERSION 1.1.3 "**
 - Dynamic Django Admin - Admin options like : list_display, list_display_link etc will work dynamic.
 
 - Material Design - Djadmin is based on material design.
@@ -33,6 +46,7 @@ Overview
 - Image preview or File information on change form if form has Image field or File field
 
 - Added "Next" and "Prev" for change form. It will display when model have 2 or more rows data and model has default django primary key field "id"
+
 
 Documentation
 =============
@@ -81,7 +95,7 @@ Documentation
 
       from djadmin.mixins import DjadminMixin
       from main.models import Book
-      admin.site.register(Book,DjadminMixin)
+      admin.site.register(Book, DjadminMixin)
 
    After that you will see DjadminMixin Inherit model name in "DjadmiModelSetting" of admin like below snapshot
    then change field values with given field.You will get field to show
@@ -90,7 +104,7 @@ Documentation
 
    * Add 'DJADMIN_FIELD_DEPTH' for define field depth.When any model has ForeignKey relation with another model and next model also has Foreignkey relation with another that define relation depth.default = 1 ::
 
-        DJADMIN_FIELD_DEPTH = 3
+        DJADMIN_FIELD_DEPTH = 2
 
         Ex:
         class Publisher(models.Model):
@@ -102,7 +116,7 @@ Documentation
         class Author(models.Model):
             book = models.ForeignKey(Book)
 
-   So, If we have Author model then depth 3 will create field in Author model:   "**book__pub__name**" for access Publisher name from Author model instance.
+   So, If we have Author model then depth 2 will create field in Author model:   "**book__pub__name**" for access Publisher name from Author model instance.
 
    * Add 'ALLOW_FORGET_PASSWORD_ADMIN' for Enable Forget password option in login page, default: Disable ::
 
@@ -123,6 +137,15 @@ Documentation
    * Add 'ADMIN_HEADER_TITLE' for change admin header title ::
 
         ADMIN_HEADER_TITLE  = 'Djadmin Administrator'
+
+
+Demo
+==========
+   * URL : https://djadmin.herokuapp.com/admin/
+
+   * Username : test1234
+
+   * Password : test1234
 
 Screenshot
 ==========

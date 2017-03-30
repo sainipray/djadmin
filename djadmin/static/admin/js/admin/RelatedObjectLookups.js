@@ -161,7 +161,7 @@
     window.dismissAddAnotherPopup = dismissAddRelatedObjectPopup;
 
     $(document).ready(function () {
-        $('body').on('click', '.related-widget-wrapper-link', function (e) {
+        $(document).on('click', '.related-widget-wrapper-link', function (e) {
             e.preventDefault();
             if (this.href) {
                 var event = $.Event('django:show-related', {href: this.href});
@@ -171,7 +171,7 @@
                 }
             }
         });
-        $('body').on('change', '.related-widget-wrapper select', function (e) {
+        $(document).on('change', '.related-widget-wrapper select', function (e) {
             var event = $.Event('django:update-related');
             $(this).trigger(event);
             if (!event.isDefaultPrevented()) {

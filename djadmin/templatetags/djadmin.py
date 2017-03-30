@@ -2,6 +2,9 @@ import re
 from importlib import import_module
 
 from django.conf import settings
+from django.contrib.admin.templatetags.admin_list import (result_headers,
+                                                          result_hidden_fields,
+                                                          results)
 from django.core.urlresolvers import reverse
 from django.template import Library
 
@@ -139,3 +142,24 @@ def admin_select_related_link(bound_field):
 
 
 simple_tag(register, admin_select_related_link)
+
+
+@register.inclusion_tag("admin/change_list_results.html")
+def result_sortable_list(cl):
+    """
+    Displays the headers and data list together
+    """
+    if not cl.params.get('o',None):
+        # Disable sortable when admin filter data from result table according to fields
+        from ..models import Sortable
+        cl.result_list = Sortable.get_sortable_row(cl.opts.model_name, cl.result_list)
+    headers = list(result_headers(cl))
+    num_sorted_fields = 0
+    for h in headers:
+        if h['sortable'] and h['sorted']:
+            num_sorted_fields += 1
+    return {'cl': cl,
+            'result_hidden_fields': list(result_hidden_fields(cl)),
+            'result_headers': headers,
+            'num_sorted_fields': num_sorted_fields,
+            'results': list(results(cl))}

@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.apps import AppConfig
-from django.conf import settings
 from django.db.models.signals import post_migrate
+
 
 def DjadminModelSettings(sender, **kwargs):
     from .signals import handle_djadmin_field_data, get_register_model_with_mixin
@@ -12,6 +15,7 @@ class ActivityAppConfig(AppConfig):
     name = 'djadmin'
 
     def ready(self):
-        import djadmin.signals
-        if getattr(settings, 'DJADMIN_DYNAMIC_FIELD_DISPLAY', False):
+        import signals
+        from djadmin import settings
+        if settings.DJADMIN_DYNAMIC_FIELD_DISPLAY:
             post_migrate.connect(DjadminModelSettings, sender=self)

@@ -1,4 +1,4 @@
-{% load i18n admin_static staticfiles %}<!DOCTYPE html>
+{% load i18n admin_static staticfiles custom %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
@@ -36,7 +36,22 @@
                             {% if has_permission %}
                                 <ul class="right hide-on-med-and-down">
                                     <!-- Dropdown Trigger -->
-                                    <li><a class="dropdown-button" href="#!" data-beloworigin="true"
+                                        {% get_current_language as LANGUAGE_CODE %}
+                                        {% get_user_define_available_languages as LANGUAGES %}
+                                        {% if LANGUAGES %}
+                                            <li><a class="dropdown-button" href="#!" data-beloworigin="true"
+                                            data-activates="dropdown2"> {% trans 'Languages' %}<i class="mdi-navigation-arrow-drop-down right"></i></a>
+                                            <ul id="dropdown2" class="dropdown-content">
+                                                {% get_language_info_list for LANGUAGES as languages %}
+                                                {% for language in languages %}
+                                                    <li><a class="{% if language.code == LANGUAGE_CODE  %}{{ request.ADMIN_COLOR_THEME }} white-text
+                                                    {% else %}{{ request.ADMIN_COLOR_THEME }}-text {% endif %}" href="{% change_language language.code %}">
+                                                    {{ language.name_local }} - {{ language.code }}
+                                                    </a></li>
+                                                {% endfor %}
+                                            </ul></li>
+                                        {% endif %}
+                                        <li><a class="dropdown-button" href="#!" data-beloworigin="true"
                                            data-activates="dropdown1"> {% trans 'Welcome,' %} {% firstof user.get_short_name user.get_username|capfirst %}<i
                                             class="mdi-navigation-arrow-drop-down right"></i></a>
                                         <ul id="dropdown1" class="dropdown-content">
@@ -132,7 +147,7 @@
                                                             <ul>
                                                                 {% if model.admin_url %}
                                                                     <li>
-                                                                        <a href="{{ model.admin_url }}">{% trans 'All' %} {{ model.name }}</a>
+                                                                        <a href="{{ model.admin_url }}" class="truncate">{% trans 'All' %} {{ model.name }}</a>
                                                                     </li>
                                                                 {% endif %}
                                                                 {% if model.add_url %}

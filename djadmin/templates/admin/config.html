@@ -1,0 +1,227 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static custom %}
+
+{% block extrastyle %}{{ block.super }}{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="{{ request.ADMIN_COLOR_THEME }}">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                {% if title %} &rsaquo; {{ title }}{% endif %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+{% block  navbar-fixed %} navbar-fixed{% endblock %}
+{% block content %}
+    <div class="col s12 m8 l12">
+        <h5>
+            <blockquote>{% trans 'Install and update project libraries' %}</blockquote>
+        </h5>
+        <div class="divider"></div>
+        <div class="row">
+            <div class="input-field col s12 l8 m12">
+                <i class="mdi-notification-play-install prefix"></i>
+                <input type="text" name="lib-name" class="validate" id="lib-name">
+                <label for="lib-name" class="truncate">{% trans 'Enter New Library Name' %}</label>
+                <span>{% trans 'Enter New Library Name (with version if required any specific version). Ex: Django==1.9.10 and Restart server button will execute command that define in "DJADMIN_SERVER_RESTART" settings' %}</span>
+            </div>
+            <div class="input-field col s12 m12 l4">
+                <div class="input-field col s12 center">
+                    <button class="btn cyan waves-effect waves-light {{ request.ADMIN_COLOR_THEME }}"
+                            id="install-library">{% trans 'Install new library' %}</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <h5>
+                    <blockquote>{% trans 'Output Windows' %}</blockquote>
+                </h5>
+                <div class="browser-window">
+                    <div class="top-bar">
+                        <div class="circles">
+                            <div id="close-circle" class="circle"></div>
+                            <div id="minimize-circle" class="circle"></div>
+                            <div id="maximize-circle" class="circle"></div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col s12">
+                                <p class="msg-text green-text caption-uppercase"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="library" class="bordered striped ">
+            <thead>
+            <tr>
+                <th data-field="sn">{% trans 'S.No.' %}</th>
+                <th data-field="name"{% trans 'Name' %}></th>
+                <th data-field="current">{% trans 'Current Version' %}</th>
+                <th data-field="latest">{% trans 'Latest Version' %}</th>
+                <th data-field="version">{% trans 'Enter Version for install' %}</th>
+                <th data-field="url">{% trans 'Action' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in all_apps %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="https://pypi.python.org/pypi/{{ i.key }}">{{ i.key }}</a></td>
+                    <td>{{ i.version }}</td>
+                    <td id="latest{{ forloop.counter }}"></td>
+                    <td id="version{{ forloop.counter }}"></td>
+                    <td id="action{{ forloop.counter }}"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block sidebar %}
+    <div class="col s12 m8 l12">
+        <h5>
+            <blockquote>{% trans 'Migration Status' %}</blockquote>
+        </h5>
+        <span>{% trans 'Click on red "migrate" label for single app migrate' %}</span>
+        <ul class="collection with-header">
+            {% for app_label in migrations.migrated_apps %}
+                <li class="collection-item">
+                    {% if app_label in migrations.unmigrated_apps %}
+                        <div>{{ app_label }}<a class="secondary-content migration" data-app="{{ app_label }}"><i
+                                class="red-text mdi-action-history "> {% trans 'Migrate' %}</i></a></div>
+                    {% else %}
+                        <div>{{ app_label }}<a class="secondary-content"><i
+                                class="mdi-action-done green-text"> {% trans 'Done' %}</i></a></div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            {% if  migrations.unmigrated_apps|length > 0 %}
+                <li class="collection-item center">
+                    <button class="btn waves-effect waves-light migrate_all {{ request.ADMIN_COLOR_THEME }} "
+                            type="submit"
+                            name="action">{% trans 'Migrate all apps' %}</button>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+{% block extrajs %}
+    <script type="text/javascript">
+        function compareVersions(installed, required) {
+
+            var a = installed.split('.');
+            var b = required.split('.');
+
+            for (var i = 0; i < a.length; ++i) {
+                a[i] = Number(a[i]);
+            }
+            for (var i = 0; i < b.length; ++i) {
+                b[i] = Number(b[i]);
+            }
+            if (a.length == 2) {
+                a[2] = 0;
+            }
+
+            if (a[0] > b[0]) return true;
+            if (a[0] < b[0]) return false;
+
+            if (a[1] > b[1]) return true;
+            if (a[1] < b[1]) return false;
+
+            if (a[2] > b[2]) return true;
+            if (a[2] < b[2]) return false;
+
+            return true;
+        }
+        var lib_counter = null;
+        function getJsonData(key, current, counter) {
+            $.getJSON("https://pypi.python.org/pypi/" + key + "/json", function (response) {
+                latest = response.info.version;
+                $('#latest' + counter).html(latest);
+                if (!compareVersions(current, latest)) {
+                    $('#action' + counter).html('<a class="waves-effect waves-light btn upgrade-lib {{ request.ADMIN_COLOR_THEME }}" data-lib="' + key + '" data-version="' + latest + '">Upgrade(' + latest + ')</a>');
+                }
+                else {
+                    $('#version' + counter).html('<div class="input-field col s12"><input placeholder="x.y.z version" data-lib="' + key + '"  id="lib-version' + counter + '" type="text" class=""> <label class="active" for="lib-version">Version of library</label></div>');
+                    $('#action' + counter).html('<a class="waves-effect waves-light btn upgrade-lib {{ request.ADMIN_COLOR_THEME }}" data-lib="' + key + '" data-version="' + latest + '">Install</a>');
+                }
+            }).error(function () {
+            })
+        }
+        {% for i in all_apps %}
+            getJsonData('{{ i.key }}', '{{ i.version }}', '{{ forloop.counter }}');
+        {% endfor %}
+        $(document).ready(function () {
+            var processBar = '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div><div class="spinner-layer spinner-red"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div><div class="spinner-layer spinner-yellow"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div><div class="spinner-layer spinner-green"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>'
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            function ajaxSubprocess(data, selector) {
+                $.ajax({
+                    url: "{% url 'djadmin_install_library' %}",
+                    type: "post",
+                    cache: false,
+                    dataType: 'json',
+                    data: data,
+                    beforeSend: function (xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        }
+                    },
+                    success: function (response) {
+                        selector.html('<i class="mdi-action-done green-text small"></i>');
+                        $('.msg-text').html('');
+                        $('.msg-text').html(response.msg);
+
+                    }
+                })
+            }
+            var parentSelector;
+            function showProgress(e){
+                parentSelector = e.parent();
+                e.hide();
+                e.parent().html(processBar);
+                return parentSelector
+            }
+            $(document).on('click', '.upgrade-lib', function () {
+                var version = $(this).data('version');
+                var lib = $(this).data('lib');
+                var data = {lib: lib, version: version, ajax_type: 'library'};
+                showProgress($(this));
+                ajaxSubprocess(data, parentSelector);
+
+            });
+            $(document).on('click', '#install-library', function () {
+                var library_name = $('#lib-name').val();
+                var data = {lib: library_name, ajax_type: 'library'};
+                showProgress($(this));
+                ajaxSubprocess(data, parentSelector)
+            });
+            $(document).on('click', '.migrate_all', function () {
+                var data = {'app': undefined, ajax_type: 'app'};
+                showProgress($(this));
+                ajaxSubprocess(data, $(this).parent())
+            });
+            $(document).on('click', '.migration', function () {
+                var data = {'app': $(this).data('app'), ajax_type: 'app'};
+                showProgress($(this));
+                ajaxSubprocess(data, parentSelector)
+            })
+        })
+        ;
+
+    </script>
+{% endblock %}
