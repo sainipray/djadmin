@@ -19,7 +19,7 @@ from ..util import get_admin_color_theme
 
 register = template.Library()
 
-CL_VALUE_RE = re.compile('value="(.*)\"')
+CL_VALUE_RE = re.compile('value="([\\d-]+)"')
 
 if django.VERSION >= (1, 9):
     from django.core.urlresolvers import translate_url

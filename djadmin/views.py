@@ -68,9 +68,12 @@ def model_sortable(request, model_name, type):
     model = ContentType.objects.get(model=model_name)
 
     if type == "update":
+        model_id_list = []
+        for model_id in json.loads(sort_array):
+            model_id_list.append(int(model_id))
         Sortable.objects.update_or_create(
             model=model,
-            defaults={'sort_array': map(int, json.loads(sort_array))},
+            defaults={'sort_array': model_id_list},
         )
     elif type == 'reset':
         try:

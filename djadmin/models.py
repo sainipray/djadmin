@@ -209,7 +209,10 @@ class Sortable(models.Model):
         ['1', '2', '3'] -> [1, 2, 3]
         :return list:
         """
-        return map(int, json.loads(self.sort_array))
+        model_id_list = []
+        for model_id in json.loads(self.sort_array):
+            model_id_list.append(int(model_id))
+        return model_id_list
 
     @staticmethod
     def get_sortable_row(model, queryset):
