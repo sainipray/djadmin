@@ -955,7 +955,7 @@ body.popup .submit-row {
 }
 
 form .related-widget-wrapper ul {
-    display: inline-block;
+    display: none;
     margin-left: 0;
     padding-left: 0;
 }
