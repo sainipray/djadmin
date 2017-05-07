@@ -161,13 +161,13 @@ class DjadminMixin(with_metaclass(RelatedFieldAdminMetaclass, admin.ModelAdmin))
 
         self.list_editable = self.djadmin_list_editable
         if not self.list_editable:
-            if (len(ModelsSetting.list_editable.all())):
+            if len(ModelsSetting.list_editable.all()):
                 self.list_editable = [field for field in [field.name for field in ModelsSetting.list_editable.all()] if
                                       field in self.list_display and field not in self.list_display_links]
 
         self.search_fields = self.djadmin_search_fields
         if not self.search_fields:
-            if (len(ModelsSetting.search_fields.all())):
+            if len(ModelsSetting.search_fields.all()):
                 self.search_fields = [field.name for field in ModelsSetting.search_fields.all()]
             else:
                 self.search_fields = ()
@@ -176,7 +176,7 @@ class DjadminMixin(with_metaclass(RelatedFieldAdminMetaclass, admin.ModelAdmin))
         if not self.date_hierarchy:
             try:
                 self.date_hierarchy = ModelsSetting.date_hierarchy.name
-            except Exception as e:
+            except Exception:
                 self.date_hierarchy = None
 
         self.actions_on_top = self.djadmin_actions_on_top

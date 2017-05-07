@@ -15,8 +15,13 @@ Djadmin is a django admin theme
 
 Overview
 ========
-
   **"NEW UPDATES"**
+
+- Added Django Admin documentation templates
+
+- Fixed Bugs
+
+  **"IN VERSION 1.1.5"**
 
 - Added Sortable in admin **change list** page.
 
@@ -28,7 +33,7 @@ Overview
 
 - Fixed Bugs
 
-  **" VERSION 1.1.3 "**
+  **"FEATURES ADDED IN VERSION 1.1.3"**
 - Dynamic Django Admin - Admin options like : list_display, list_display_link etc will work dynamic.
 
 - Material Design - Djadmin is based on material design.
@@ -63,6 +68,8 @@ Documentation
    * Add middleware in MIDDLEWARE_CLASSES list ::
 
      'djadmin.middleware.DJMiddleware',
+
+   * Please make sure you already have 'django.template.context_processors.request' in context_processors of settings. If you don't have, please add it
 
    * Add in urls.py ::
 

@@ -4,17 +4,18 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.utils.translation import ugettext as _
 
 from djadmin import settings
-from .models import DjadminField, DjadminModelSetting, DjadminCard, Visitor
+from .models import DjadminField, DjadminModelSetting, DjadminCard
 
 User = get_user_model()
 
 LIST_PAGE, FORM_PAGE, = 0, 1
 
+
 class DjadminCardInline(admin.TabularInline):
     model = DjadminCard
+
 
 class AdminDjangoModelSettings(admin.ModelAdmin):
     list_display = ('model',)

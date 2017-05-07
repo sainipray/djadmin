@@ -1,0 +1,69 @@
+{% extends "admin_doc/base_docs.html" %}
+{% load i18n %}
+
+{% block coltype %}colSM{% endblock %}
+{% block breadcrumbs %}
+    <nav class="{{ request.ADMIN_COLOR_THEME }}">
+        <div class="nav-wrapper">
+            <div class="col s12 l12 m12 ">
+                <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                &rsaquo; <a href="{% url 'django-admindocs-docroot' %}">{% trans 'Documentation' %}</a>
+                &rsaquo; {% trans 'Tags' %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+{% block title %}{% trans 'Template tags' %}{% endblock %}
+
+{% block content %}
+    <div class="card-panel">
+        <h1>{% trans 'Template tag documentation' %}</h1>
+        <hr>
+        <div id="content-main">
+            {% regroup tags|dictsort:"library" by library as tag_libraries %}
+            {% for library in tag_libraries %}
+                <div class="module">
+                <ul class="collection {{ request.ADMIN_COLOR_THEME }} white-text">
+                    <h4 class="title ">  {{ forloop.counter }}. {% firstof library.grouper _("Built-in tags") %}</h4>
+                </ul>
+                    {% if library.grouper %}<p class="small quiet">
+                        {% blocktrans with code="{"|add:"% load "|add:library.grouper|add:" %"|add:"}" %}To use these
+                            tags, put <code>{{ code }}</code> in your template before using the tag.{% endblocktrans %}
+                    </p>
+                        <hr/>{% endif %}
+
+                    {% for tag in library.list|dictsort:"name" %}
+
+                        <h4 class="heading" id='{{ library.grouper|default:"built_in" }}-{{ tag.name }}'>{{ tag.name }} <a href='#{{ library.grouper|default:"built_in" }}-{{ tag.name }}' ><i  class="mdi-editor-format-quote"></i></a> </h4>
+                        <p>{{ tag.title|striptags }}</p>
+                        {{ tag.body }}
+                        {% if not forloop.last %}
+                            <div class="divider"></div>
+                            {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {% regroup tags|dictsort:"library" by library as tag_libraries %}
+    {% for library in tag_libraries %}
+        <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                        class="mdi-action-dashboard white-text"></i> {% firstof library.grouper _("Built-in tags") %}
+                </div>
+                <div class="collapsible-body">
+                    <div class="collection">
+                        {% for tag in library.list|dictsort:"name" %}
+                            <a href="#{{ library.grouper|default:"built_in" }}-{{ tag.name }}"
+                               class="collection-item">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+{% endblock %}

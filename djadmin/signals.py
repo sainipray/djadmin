@@ -88,10 +88,10 @@ user_logged_in.connect(visitor, sender=User, dispatch_uid="visitor")
 
 
 def get_register_model_with_mixin():
-    djadmiMixin_inherit_classes = DjadminMixin.__subclasses__()
+    djadmin_mixin_inherit_classes = DjadminMixin.__subclasses__()
     djadmin_mixin_model = []
     for model, model_admin in admin.site._registry.items():
-        if model_admin.__class__ in djadmiMixin_inherit_classes or model_admin.__class__.__name__ == DjadminMixin.__name__:
+        if model_admin.__class__ in djadmin_mixin_inherit_classes or model_admin.__class__.__name__ == DjadminMixin.__name__:
             djadmin_mixin_model.append(model)
     return djadmin_mixin_model
 

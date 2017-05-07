@@ -1,0 +1,66 @@
+{% extends "admin_doc/base_docs.html" %}
+{% load i18n %}
+
+{% block coltype %}colSM{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="{{ request.ADMIN_COLOR_THEME }}">
+        <div class="nav-wrapper">
+            <div class="col s12 l12 m12 ">
+                <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                &rsaquo; <a href="{% url 'django-admindocs-docroot' %}">{% trans 'Documentation' %}</a>
+                &rsaquo; {% trans 'Models' %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block title %}{% trans 'Models' %}{% endblock %}
+
+{% block content %}
+<div class="card-panel">
+<h1>{% trans 'Model documentation' %}</h1>
+<hr>
+{% regroup models by app_config as grouped_models %}
+
+<div id="content-main">
+{% for group in grouped_models %}
+<div class="module">
+<h4 class="header" id="app-{{ group.grouper.label }}">{{ forloop.counter }}. {{ group.grouper.verbose_name }} ({{ group.grouper.name }})</h4>
+<div class="divider"></div>
+<table class="xfull">
+{% for model in group.list %}
+<tr>
+<th><a href="{% url 'django-admindocs-models-detail' app_label=model.app_label model_name=model.model_name %}">{{ forloop.counter }}. {{ model.object_name }}</a></th>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endfor %}
+
+</div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related" class="sidebar">
+<div class="module">
+{% regroup models by app_config as grouped_models %}
+    <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                        class="mdi-action-dashboard white-text"></i> {% trans 'Model groups' %}
+                </div>
+                <div class="collapsible-body">
+                    <div class="collection">
+                       {% for group in grouped_models %}
+                            <a href="#app-{{ group.grouper.label }}"
+                               class="collection-item">{{ group.grouper.verbose_name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+</div>
+</div>
+{% endblock %}

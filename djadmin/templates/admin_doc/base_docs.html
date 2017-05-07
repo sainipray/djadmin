@@ -1,0 +1,9 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% block  navbar-fixed %} navbar-fixed{% endblock %}
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/prism.css" %}"/>
+{% endblock %}
+{% block extrajs %}
+    <script src="{% static "admin/js/prism.js" %}" type="text/javascript"></script>
+{% endblock %}

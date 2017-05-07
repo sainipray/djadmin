@@ -1,0 +1,95 @@
+{% extends "admin_doc/base_docs.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style type="text/css">
+        .module table {
+            width: 100%;
+        }
+
+        .module table p {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="{{ request.ADMIN_COLOR_THEME }}">
+        <div class="nav-wrapper">
+            <div class="col s12 l12 m12 ">
+                <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                &rsaquo; <a href="{% url 'django-admindocs-docroot' %}">{% trans 'Documentation' %}</a>
+                &rsaquo; <a href="{% url 'django-admindocs-models-index' %}">{% trans 'Models' %}</a>
+                &rsaquo; {{ name }}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block title %}{% blocktrans %}Model: {{ name }}{% endblocktrans %}{% endblock %}
+
+{% block content %}
+    <div class="card-panel">
+        <div id="content-main">
+            <h1>{{ name }}</h1>
+            <p class="subhead">{{ summary }}</p>
+            <hr>
+            {{ description }}
+            <h5>{% trans 'Fields' %}</h5>
+            <div class="divider"></div>
+            <div class="module">
+                <table class="model docutils">
+                    <thead>
+                    <tr>
+                        <th>{% trans 'No.' %}</th>
+                        <th>{% trans 'Field' %}</th>
+                        <th>{% trans 'Type' %}</th>
+                        <th>{% trans 'Description' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for field in fields|dictsort:"name" %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ field.name }}</td>
+                            <td>{{ field.data_type }}</td>
+                            <td>{{ field.verbose }}{% if field.help_text %} - {{ field.help_text|safe }}{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if methods %}
+                <h5>{% trans 'Methods with arguments' %}</h5>
+                <div class="divider"></div>
+                <div class="module">
+                    <table class="model docutils">
+                        <thead>
+                        <tr>
+                            <th>{% trans 'No.' %}</th>
+                            <th>{% trans 'Method' %}</th>
+                            <th>{% trans 'Arguments' %}</th>
+                            <th>{% trans 'Description' %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for method in methods|dictsort:"name" %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ method.name }}</td>
+                                <td>{{ method.arguments }}</td>
+                                <td>{{ method.verbose }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            <p class="small"><a
+                    href="{% url 'django-admindocs-models-index' %}">&lsaquo; {% trans 'Back to Model documentation' %}</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

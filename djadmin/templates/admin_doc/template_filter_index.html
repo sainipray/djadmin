@@ -1,0 +1,71 @@
+{% extends "admin_doc/base_docs.html" %}
+{% load i18n %}
+{% block  navbar-fixed %} navbar-fixed{% endblock %}
+{% block coltype %}colSM{% endblock %}
+{% block breadcrumbs %}
+    <nav class="{{ request.ADMIN_COLOR_THEME }}">
+        <div class="nav-wrapper">
+            <div class="col s12 l12 m12 ">
+                <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                &rsaquo; <a href="{% url 'django-admindocs-docroot' %}">{% trans 'Documentation' %}</a>
+                &rsaquo; {% trans 'Filters' %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+{% block title %}{% trans 'Template filters' %}{% endblock %}
+
+{% block content %}
+   <div class="card-panel">
+
+<h1>{% trans 'Template filter documentation' %}</h1>
+<hr>
+<div id="content-main">
+{% regroup filters|dictsort:"library" by library as filter_libraries %}
+    {% for library in filter_libraries %}
+        <div class="module">
+            <ul class="collection {{ request.ADMIN_COLOR_THEME }} white-text">
+                <h4 class="title ">  {{ forloop.counter }}. {% firstof library.grouper _("Built-in filters") %}</h4>
+            </ul>
+            {% if library.grouper %}
+                <p class="small quiet">{% blocktrans with code="{"|add:"% load "|add:library.grouper|add:" %"|add:"}" %}
+                    To use these filters, put <code>{{ code }}</code> in your template before using the
+                    filter.{% endblocktrans %}</p>
+                <hr/>
+            {% endif %}
+            {% for filter in library.list|dictsort:"name" %}
+                <h4 class="heading" id='{{ library.grouper|default:"built_in" }}-{{ filter.name }}'>{{ filter.name }}
+                    <a href='#{{ library.grouper|default:"built_in" }}-{{ filter.name }}'><i class="mdi-editor-format-quote"></i></a></h4>
+                <p> {{ filter.title }}</p>
+                {{ filter.body }}
+                {% if not forloop.last %}
+                    <div class="divider"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+   </div>
+{% endblock %}
+
+{% block sidebar %}
+{% regroup filters|dictsort:"library" by library as filter_libraries %}
+{% for library in filter_libraries %}
+
+ <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header {{ request.ADMIN_COLOR_THEME }} white-text"><i
+                        class="mdi-action-dashboard white-text"></i> {% firstof library.grouper _("Built-in filters") %}
+                </div>
+                <div class="collapsible-body">
+                    <div class="collection">
+                        {% for filter in library.list|dictsort:"name" %}
+                            <a href="#{{ library.grouper|default:"built_in" }}-{{ filter.name }}"
+                               class="collection-item">{{ filter.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+{% endblock %}

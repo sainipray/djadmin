@@ -1392,3 +1392,32 @@ select + .related-widget-wrapper-link,
 .clear {
     clear: both
 }
+
+h4.heading {
+    line-height: 2.508rem;
+    margin: 1.14rem 0 0.912rem 0;
+    font-size: 1.4rem;
+    font-weight: 400;
+    padding-top: 64px;
+    margin-top: -64px;
+}
+
+h4.title {
+    line-height: 2.508rem;
+    margin: 1.14rem 0 0.912rem 1rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+table.docutils > thead > tr, table.docutils > tbody > tr {
+    border-bottom: 1px solid #d0d0d0
+}
+
+table.docutils > tbody > tr:nth-child(odd) {
+    background-color: #f2f2f2
+}
+
+table.docutils > tbody > tr > td {
+    border-radius: 0px
+}

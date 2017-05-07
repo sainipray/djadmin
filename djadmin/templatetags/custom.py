@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django
 import os
 import re
+
+import django
 from django import template
 from django.apps import apps
 from django.conf import settings, global_settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import Resolver404, resolve, reverse, NoReverseMatch
 from django.db.models import Q
 from django.template import TemplateSyntaxError
 from django.templatetags.i18n import GetAvailableLanguagesNode
+from django.utils.translation import override
 
 from djadmin import settings as djadmin_settings
 from ..models import Visitor, DjadminModelSetting
@@ -24,8 +27,11 @@ CL_VALUE_RE = re.compile('value="([\\d-]+)"')
 if django.VERSION >= (1, 9):
     from django.core.urlresolvers import translate_url
 else:
+    from django.utils.six.moves.urllib.parse import urlsplit, urlunsplit
+
+
     def translate_url(url, lang_code):
-        parsed = urlsplit(path)
+        parsed = urlsplit(url)
         try:
             match = resolve(parsed.path)
         except Resolver404:
@@ -64,33 +70,31 @@ def visitors():
 def calc_visitors():
     visit = Visitor.objects.all()
     pc = visit.filter(device_type="PC").count()
-    Mobile = visit.filter(device_type="Mobile").count()
-    Tablet = visit.filter(device_type="Tablet").count()
-    Unknown = visit.filter(device_type="Touch").count()
-    Unknown += visit.filter(device_type="Bot").count()
-    Unknown += visit.filter(device_type="Unknown").count()
-    return {'pc': pc, 'mobile': Mobile, 'tablet': Tablet, 'unknown': Unknown}
+    mobile = visit.filter(device_type="Mobile").count()
+    tablet = visit.filter(device_type="Tablet").count()
+    unknown = visit.filter(device_type="Touch").count()
+    unknown += visit.filter(device_type="Bot").count()
+    unknown += visit.filter(device_type="Unknown").count()
+    return {'pc': pc, 'mobile': mobile, 'tablet': tablet, 'unknown': unknown}
 
 
 @register.assignment_tag
-def next_prev(Model):
-    Next = None
-    Prev = None
-    if Model._meta.pk.__class__.__name__ == "AutoField":
-        Next_Queryset = Model.__class__.objects.filter(id__gt=Model.id).order_by('id')
-        Prev_Queryset = Model.__class__.objects.filter(id__lt=Model.id).order_by('id')
-        if Next_Queryset:
-            Next = Next_Queryset[0].id
-        if Prev_Queryset:
-            Prev = Prev_Queryset[Prev_Queryset.count() - 1].id
-    return {'next': Next, 'prev': Prev}
+def next_prev(model):
+    next = None
+    prev = None
+    if model._meta.pk.__class__.__name__ == "AutoField":
+        next_queryset = model.__class__.objects.filter(id__gt=model.id).order_by('id')
+        prev_queryset = model.__class__.objects.filter(id__lt=model.id).order_by('id')
+        if next_queryset:
+            next = next_queryset[0].id
+        if prev_queryset:
+            prev = prev_queryset[prev_queryset.count() - 1].id
+    return {'next': next, 'prev': prev}
 
 
 @register.assignment_tag
 def admin_color_theme():
-    admin_color_theme = djadmin_settings.ADMIN_COLOR_THEME
-    ADMIN_COLOR_THEME = get_admin_color_theme(admin_color_theme)
-    return ADMIN_COLOR_THEME
+    return get_admin_color_theme(djadmin_settings.ADMIN_COLOR_THEME)
 
 
 @register.assignment_tag
@@ -100,7 +104,7 @@ def history_of_app(app_label, user):
     log_list = None
     for model in models:
         q |= Q(content_type=model.pk)
-    if 'pk' in user:
+    if hasattr(user, 'pk'):
         log_list = LogEntry.objects.filter(q).filter(user=user.pk).select_related().order_by('-action_time')[:10]
     return log_list
 
@@ -148,12 +152,12 @@ def get_pk(model, app_label):
     try:
         obj = DjadminModelSetting.objects.get(model=model, app_label=app_label)
         pk = obj.pk
-    except:
+    except DjadminModelSetting.DoesNotExist:
         pass
     return pk
 
 
 @register.simple_tag(takes_context=True)
-def change_language(context, lang=None, *args, **kwargs):
+def change_language(context, lang=None):
     path = context['request'].path
     return translate_url(path, lang)

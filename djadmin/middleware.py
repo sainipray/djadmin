@@ -19,14 +19,13 @@ else:
 class DJMiddleware(MiddlewareMixin):
     def process_request(self, request):
         request.user_agent = SimpleLazyObject(lambda: get_user_agent(request))
-        admin_color_theme = settings.ADMIN_COLOR_THEME
-        ADMIN_COLOR_THEME = get_admin_color_theme(admin_color_theme)
-        ADMIN_COLOR_THEME_CODE = get_admin_color_theme_hex_code(admin_color_theme)
-        ALLOW_FORGET_PASSWORD_ADMIN = settings.ALLOW_FORGET_PASSWORD_ADMIN
+        admin_color_theme = get_admin_color_theme(settings.ADMIN_COLOR_THEME)
+        admin_color_theme_code = get_admin_color_theme_hex_code(admin_color_theme)
+        allow_forget_password_admin = settings.ALLOW_FORGET_PASSWORD_ADMIN
         AdminSite.site_header = settings.ADMIN_HEADER_TITLE
-        request.ADMIN_COLOR_THEME = ADMIN_COLOR_THEME
-        request.ALLOW_FORGET_PASSWORD_ADMIN = ALLOW_FORGET_PASSWORD_ADMIN
-        request.ADMIN_COLOR_THEME_CODE = ADMIN_COLOR_THEME_CODE
+        request.ADMIN_COLOR_THEME = admin_color_theme
+        request.ALLOW_FORGET_PASSWORD_ADMIN = allow_forget_password_admin
+        request.ADMIN_COLOR_THEME_CODE = admin_color_theme_code
         if request.user.is_superuser and settings.DJADMIN_DYNAMIC_FIELD_DISPLAY:
             register_model_object_list = get_register_model_with_mixin()
             exist_model_object_list = DjadminModelSetting.objects.all()
