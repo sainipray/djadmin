@@ -5,7 +5,9 @@ import sys
 from hashlib import md5
 
 import django
+from django.contrib.sessions.models import Session
 from django.core.cache import cache
+from django.core.urlresolvers import Resolver404, resolve
 from django.db import DEFAULT_DB_ALIAS, connections
 from django.db.migrations.executor import MigrationExecutor
 from django.db.migrations.loader import MigrationLoader
@@ -125,3 +127,30 @@ def user_is_authenticated(user):
         return user.is_authenticated
     else:
         return user.is_authenticated()
+
+
+def is_session_exist(request):
+    if request.session.session_key and request.session.exists(request.session.session_key):
+        return True
+    return False
+
+
+def get_session(request):
+    if is_session_exist(request):
+        return Session.objects.get(session_key=request.session.session_key)
+    return create_new_session(request)
+
+
+def create_new_session(request):
+    request.session.create()
+    return get_session(request)
+
+
+def is_admin_url(request):
+    try:
+        result = resolve(request.path)
+        if result.namespace == 'admin':
+            return True
+    except Resolver404:
+        pass
+    return False

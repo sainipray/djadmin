@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from itertools import groupby
+
 from django.conf import settings
 from django.contrib import admin
 from six import with_metaclass
@@ -188,7 +190,15 @@ class DjadminMixin(with_metaclass(RelatedFieldAdminMetaclass, admin.ModelAdmin))
             self.actions_on_bottom = ModelsSetting.actions_on_bottom
 
         self.djadmin_card = self.get_djadmin_cards(ModelsSetting, LIST_PAGE)
-        return super(DjadminMixin, self).changelist_view(request, extra_context=extra_context)
+        response = super(DjadminMixin, self).changelist_view(request, extra_context=extra_context)
+        qs = response.context_data['cl'].queryset
+        graph_fields = self.get_list_graph(request)
+        response.context_data['fields_graph'] = {'fields': graph_fields,
+                                                 'data': self.groupby_queryset_with_fields(qs, graph_fields, request)}
+        return response
+
+    def get_list_graph(self, request):
+        return self.djadmin_list_graph if hasattr(self, 'djadmin_list_graph') else ()
 
     def has_add_permission(self, request):
         context = super(DjadminMixin, self).has_add_permission(request)
@@ -216,3 +226,22 @@ class DjadminMixin(with_metaclass(RelatedFieldAdminMetaclass, admin.ModelAdmin))
             ModelsSetting = self.get_model_object(self.model.__name__)
             context = ModelsSetting.has_delete_permission
         return context
+
+    def groupby_queryset_with_fields(self, queryset, fields, request):
+        fields_qs = {}
+        for field in fields:
+            queryset = queryset.order_by(field)
+
+            def getter(obj):
+                related_names = field.split('__')
+                for related_name in related_names:
+                    try:
+                        obj = getattr(obj, related_name)
+                    except AttributeError:
+                        obj = None
+                return obj
+
+            fields_qs[field] = [{'grouper': key, 'list': list(group)} for key, group in
+                                groupby(queryset, lambda x: getattr(x, field)
+                                if '__' not in field else getter(x))]
+        return fields_qs

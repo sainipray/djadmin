@@ -8,7 +8,7 @@ from django.contrib.sessions.models import Session
 from django.db import models
 from django.db.models import Count
 from django.db.models import When, Case
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _,ugettext
 
 from djadmin import settings
 
@@ -20,7 +20,7 @@ class Visitor(models.Model):
     """
     It will store information about user when logged in using django admin
     """
-    name = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_('User'), null=True)
+    name = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_('User'), null=True, on_delete=models.SET_NULL)
     city = models.CharField(_('City'), max_length=255, null=True)
     state = models.CharField(_('State'), max_length=50, null=True)
     country = models.CharField(_('Country'), max_length=50, null=True)
@@ -35,10 +35,11 @@ class Visitor(models.Model):
     device_name = models.CharField(_('Device Name'), max_length=20, null=True)
     device_name_brand = models.CharField(_('Device Brand Name'), max_length=20, null=True)
     device_name_model = models.CharField(_('Device Model Name'), max_length=20, null=True)
-    unique_computer_processor = models.CharField(_('Computer Processor'), max_length=255, null=True)
     session = models.ForeignKey(Session, verbose_name=_('Session'), null=True, blank=True, on_delete=models.SET_NULL)
     latitude = models.DecimalField(_('Latitude'), max_digits=9, decimal_places=6, null=True)
     longitude = models.DecimalField(_('Longitude'), max_digits=9, decimal_places=6, null=True)
+    http_referer = models.URLField(_('HTTP_REFERER URL'), null=True, blank=True)
+    request_url = models.URLField(_('Request URL'), null=True)
 
     class Meta:
         ordering = ['visit_datetime']

@@ -67,18 +67,6 @@ def visitors():
 
 
 @register.assignment_tag
-def calc_visitors():
-    visit = Visitor.objects.all()
-    pc = visit.filter(device_type="PC").count()
-    mobile = visit.filter(device_type="Mobile").count()
-    tablet = visit.filter(device_type="Tablet").count()
-    unknown = visit.filter(device_type="Touch").count()
-    unknown += visit.filter(device_type="Bot").count()
-    unknown += visit.filter(device_type="Unknown").count()
-    return {'pc': pc, 'mobile': mobile, 'tablet': tablet, 'unknown': unknown}
-
-
-@register.assignment_tag
 def next_prev(model):
     next = None
     prev = None
@@ -161,3 +149,10 @@ def get_pk(model, app_label):
 def change_language(context, lang=None):
     path = context['request'].path
     return translate_url(path, lang)
+
+
+@register.filter
+def foreignkey_field_name(value):
+    related_names = value.split('__')
+    return related_names[-1].title().replace('_', ' ').title()
+

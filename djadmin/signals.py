@@ -7,81 +7,72 @@ import geocoder
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.signals import user_logged_in
-from django.contrib.sessions.models import Session
 from django.db.models import ForeignKey
 
 from djadmin import settings
 from .mixins import DjadminMixin
 from .models import DjadminField, DjadminModelSetting
 from .models import Visitor
-from .util import calculate_action_field_list, user_is_authenticated
+from .util import calculate_action_field_list, get_session
 
 User = get_user_model()
 
 
-def visitor(sender, user, request, **kwargs):
-    if hasattr(request, 'user') and user_is_authenticated(request.user):
-        if request.user_agent.is_mobile:
-            device_type = "Mobile"
-        elif request.user_agent.is_tablet:
-            device_type = "Tablet"
-        elif request.user_agent.is_touch_capable:
-            device_type = "Touch"
-        elif request.user_agent.is_pc:
-            device_type = "PC"
-        elif request.user_agent.is_bot:
-            device_type = "Bot"
-        else:
-            device_type = "Unknown"
-
-        browser = request.user_agent.browser.family
-        browser_version = request.user_agent.browser.version_string
-
-        os_info = request.user_agent.os.family
-        os_info_version = request.user_agent.os.version_string
-
-        device_name = request.user_agent.device.family
-        device_name_brand = request.user_agent.device.brand
-        device_name_model = request.user_agent.device.model
-
-        ipaddress = request.META.get("HTTP_X_FORWARDED_FOR", None)
-        if ipaddress:
-            ipaddress = ipaddress.split(", ")[0]
-        else:
-            ipaddress = request.META.get("REMOTE_ADDR", "")
-        if not request.session.exists(request.session.session_key):
-            request.session.create()
-        session = Session.objects.get(session_key=request.session.session_key)
-        city = None
-        state = None
-        country = None
-        latitude = None
-        longitude = None
+def add_visitor(request, user=None):
+    if request.user_agent.is_mobile:
+        device_type = "Mobile"
+    elif request.user_agent.is_tablet:
+        device_type = "Tablet"
+    elif request.user_agent.is_touch_capable:
+        device_type = "Touch"
+    elif request.user_agent.is_pc:
+        device_type = "PC"
+    elif request.user_agent.is_bot:
+        device_type = "Bot"
+    else:
+        device_type = "Unknown"
+    browser = request.user_agent.browser.family
+    browser_version = request.user_agent.browser.version_string
+    os_info = request.user_agent.os.family
+    os_info_version = request.user_agent.os.version_string
+    device_name = request.user_agent.device.family
+    device_name_brand = request.user_agent.device.brand
+    device_name_model = request.user_agent.device.model
+    ipaddress = request.META.get("HTTP_X_FORWARDED_FOR", None)
+    http_referer = request.META.get("HTTP_REFERER", None)
+    request_url = request.build_absolute_uri()
+    if ipaddress:
+        ipaddress = ipaddress.split(", ")[0]
+    else:
+        ipaddress = request.META.get("REMOTE_ADDR", "")
+    session = get_session(request)
+    city = None
+    state = None
+    country = None
+    latitude = None
+    longitude = None
+    if request.method == 'POST':
         try:
-            if not request.POST['latitude'] == '':
-                latitude = request.POST['latitude']
-                longitude = request.POST['longitude']
+            if not request.POST.get('latitude', '') == '':
+                latitude = request.POST.get('latitude', None)
+                longitude = request.POST.get('longitude', None)
                 g = geocoder.google([latitude, longitude], method='reverse')
                 city = g.city
                 state = g.state_long
                 country = g.country_long
-            else:
-                location = geocoder.ipinfo(ipaddress)
-                if location:
-                    city = location.city
-                    state = location.state
-                    country = location.country
         except Exception as e:
             pass
-        username = request.user
-        unique_computer = request.META.get("PROCESSOR_IDENTIFIER", None)
-        Visitor.objects.create(device_type=device_type, name=username, ipaddress=ipaddress, browser=browser,
-                               browser_version=browser_version, os_info_version=os_info_version,
-                               os_info=os_info,
-                               device_name=device_name, city=city, state=state, country=country,
-                               device_name_brand=device_name_brand, device_name_model=device_name_model,
-                               unique_computer_processor=unique_computer, session=session, latitude=latitude,
-                               longitude=longitude)
+    Visitor.objects.create(device_type=device_type, name=user, ipaddress=ipaddress, browser=browser,
+                           browser_version=browser_version, os_info_version=os_info_version,
+                           os_info=os_info,http_referer=http_referer,request_url=request_url,
+                           device_name=device_name, city=city, state=state, country=country,
+                           device_name_brand=device_name_brand, device_name_model=device_name_model,
+                           session=session, latitude=latitude, longitude=longitude)
+
+
+def visitor(sender, user, request, **kwargs):
+    if not request.user.is_superuser or settings.ALLOW_STAFF_USER_AS_VISITOR:
+        add_visitor(request, user)
 
 
 user_logged_in.connect(visitor, sender=User, dispatch_uid="visitor")

@@ -111,11 +111,7 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <div class="col l6 s12 m12">
-                        <div class="row">
-                            <canvas id="doughnut" width="200" height="200"></canvas>
-                        </div>
-                    </div>
+                  
                 </div>
                 </div>
             </li>
@@ -163,52 +159,4 @@
             </div>
         </li>
     </ul>
-{% endblock %}
-{% block extrajs %}
-    {% if available_apps %}
-        {% calc_visitors as calc_visitor %}
-        <script type="text/javascript" src="{% static 'admin/js/packages/graph/Chart.bundle.js' %}"></script>
-        <script type="text/javascript">
-            var config = {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [
-                            {{ calc_visitor.mobile }},
-                            {{ calc_visitor.tablet }},
-                            {{ calc_visitor.pc }},
-                            {{ calc_visitor.unknown }}
-                        ],
-                        backgroundColor: [
-                            "#f44336",
-                            "#9c27b0",
-                            "#3f51b5",
-                            "#2196f3"
-                        ],
-                        label: 'Dataset 1'
-                    }
-                    ],
-                    labels: ['Mobile', 'Tablet', 'PC', 'Other']
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'bottom',
-                    },
-                    title: {
-                        display: true,
-                        text: 'User login details'
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
-                    }
-                }
-            };
-            window.onload = function () {
-                var ctx = document.getElementById("doughnut").getContext("2d");
-                window.myDoughnut = new Chart(ctx, config);
-            };
-        </script>
-    {% endif %}
 {% endblock %}

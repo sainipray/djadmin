@@ -1,6 +1,6 @@
 default_app_config = 'djadmin.apps.ActivityAppConfig'
 __name__ = 'djadmin'
 __author__ = 'Neeraj Kumar'
-__version__ = '1.1.6'
+__version__ = '1.1.7'
 __author_email__ = 'sainineeraj1234@gmail.com'
 __description__ = 'Djadmin is a django admin theme'
