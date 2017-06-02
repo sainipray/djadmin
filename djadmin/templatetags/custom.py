@@ -154,5 +154,5 @@ def change_language(context, lang=None):
 @register.filter
 def foreignkey_field_name(value):
     related_names = value.split('__')
-    return related_names[-1].title().replace('_', ' ').title()
+    return " > ".join(related_names).replace('_',' ').title()
 

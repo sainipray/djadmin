@@ -224,10 +224,10 @@
                         type: 'doughnut',
                         data: {
                             datasets: [{
-                                data: [{% for val in value %}{{ val.list|length }},{% endfor %}],
+                                data: [{% for val in value %}{{ val.list|length }}, {% endfor %}],
                                 backgroundColor: [{% for val in value %}randomColorGenerator(),{% endfor %}],
-                                label: 'Dataset 1'}],
-                            labels: [{% for val in value %}"{{ val.grouper }}",{% endfor %}]
+                            }],
+                            labels: [{% for val in value %}"{{ val.grouper|capfirst }}",{% endfor %}]
                         },
                         options: options_data
                     };

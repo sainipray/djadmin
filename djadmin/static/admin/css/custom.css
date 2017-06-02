@@ -1421,3 +1421,9 @@ table.docutils > tbody > tr:nth-child(odd) {
 table.docutils > tbody > tr > td {
     border-radius: 0px
 }
+
+@media only screen and (max-width: 600px) {
+    .sidebar-collapse {
+        top: -43px;
+    }
+}

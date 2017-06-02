@@ -7,7 +7,7 @@ var randomColorGenerator = function () {
 var options_data = {
     responsive: true,
     legend: {
-        position: 'bottom',
+        display:false
     },
     title: {
         display: true,
