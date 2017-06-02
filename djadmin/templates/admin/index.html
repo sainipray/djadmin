@@ -57,7 +57,7 @@
                                 <div class="collapsible-header">
                                     <div class="col s1 {{ visit.device_type }} hide-on-med-and-down"></div>
                                     <div class="col s3"> {{ visit.os_info }} {{ visit.device_type }}</div>
-                                    <div class="col s2"> {{ visit.name|capfirst }}</div>
+                                    <div class="col s2"> {{ visit.name|default_if_none:'Visitor'|capfirst }}</div>
                                     <div class="col s4 hide-on-med-and-down">{{ visit.visit_datetime|date }} {{ visit.visit_datetime|time }}</div>
                                 </div>
                                 <div class="collapsible-body">

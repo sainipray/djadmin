@@ -64,14 +64,14 @@ def add_visitor(request, user=None):
             pass
     Visitor.objects.create(device_type=device_type, name=user, ipaddress=ipaddress, browser=browser,
                            browser_version=browser_version, os_info_version=os_info_version,
-                           os_info=os_info,http_referer=http_referer,request_url=request_url,
+                           os_info=os_info, http_referer=http_referer, request_url=request_url,
                            device_name=device_name, city=city, state=state, country=country,
                            device_name_brand=device_name_brand, device_name_model=device_name_model,
                            session=session, latitude=latitude, longitude=longitude)
 
 
 def visitor(sender, user, request, **kwargs):
-    if not request.user.is_superuser or settings.ALLOW_STAFF_USER_AS_VISITOR:
+    if hasattr(request, 'user') and (not request.user.is_superuser or settings.ALLOW_STAFF_USER_AS_VISITOR):
         add_visitor(request, user)
 
 
