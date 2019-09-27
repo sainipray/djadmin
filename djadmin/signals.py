@@ -62,12 +62,13 @@ def add_visitor(request, user=None):
                 country = g.country_long
         except Exception as e:
             pass
+    unique_computer = request.META.get("PROCESSOR_IDENTIFIER", None)
     Visitor.objects.create(device_type=device_type, name=user, ipaddress=ipaddress, browser=browser,
                            browser_version=browser_version, os_info_version=os_info_version,
                            os_info=os_info, http_referer=http_referer, request_url=request_url,
                            device_name=device_name, city=city, state=state, country=country,
                            device_name_brand=device_name_brand, device_name_model=device_name_model,
-                           session=session, latitude=latitude, longitude=longitude)
+                           unique_computer_processor=unique_computer,session=session, latitude=latitude, longitude=longitude)
 
 
 def visitor(sender, user, request, **kwargs):

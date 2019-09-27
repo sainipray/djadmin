@@ -1421,6 +1421,27 @@ table.docutils > tbody > tr:nth-child(odd) {
 table.docutils > tbody > tr > td {
     border-radius: 0px
 }
+.collection-md{
+    width: 25%;
+    float: left;
+    padding: 0 15px;
+    margin-top: 30px;
+    box-sizing: border-box;
+}
+.row .collection-md .col.l3{
+    width: 100%;
+    padding: 0;
+}
+.row .collection-md span.badge{
+    right: 30px;
+    border-radius: 3px;
+}
+
+.char-block{
+    display: block;
+    float: none;
+    margin-right: auto;
+}
 
 @media only screen and (max-width: 600px) {
     .sidebar-collapse {

@@ -7,7 +7,7 @@ from hashlib import md5
 import django
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
-from django.core.urlresolvers import Resolver404, resolve
+from django.urls import Resolver404, resolve
 from django.db import DEFAULT_DB_ALIAS, connections
 from django.db.migrations.executor import MigrationExecutor
 from django.db.migrations.loader import MigrationLoader

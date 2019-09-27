@@ -21,11 +21,11 @@ if settings.DJADMIN_CONFIG_PAGE:
 forget_password_url = []
 if settings.ALLOW_FORGET_PASSWORD_ADMIN:
     forget_password_url = [
-        url(r'^password_reset/$', views.password_reset, name='password_reset'),
-        url(r'^password_reset/done/$', views.password_reset_done, name='password_reset_done'),
+        url(r'^password_reset/$', views.PasswordResetView.as_view(), name='password_reset'),
+        url(r'^password_reset/done/$', views.PasswordResetDoneView.as_view(), name='password_reset_done'),
         url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-            views.password_reset_confirm, name='password_reset_confirm'),
-        url(r'^reset/done/$', views.password_reset_complete, name='password_reset_complete'),
+            views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+        url(r'^reset/done/$', views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     ]
 
 urlpatterns = admin_url + forget_password_url + djadmin_config_page

@@ -1,6 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static custom %}
-
+{% load i18n admin_static djadmin custom %}
 {% block extrastyle %}{{ block.super }}{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
@@ -22,19 +21,20 @@
         <ul class="collapsible collapsible-accordion" data-collapsible="expandable">
             <li>
                 <div class="collapsible-header active {{ request.ADMIN_COLOR_THEME }} white-text"><i
-                        class="mdi-navigation-apps white-text"></i>{% trans 'Models' %}</div>
+                        class="mdi-navigation-apps white-text"></i>{% trans 'Modules' %}</div>
                 <div class="collapsible-body">
                     <div class="row">
                         {% for app in available_apps %}
-                            <div class="collection">
-                                <a href="{{ app.app_url }}" class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text center">{{ app.app_label|capfirst }} <span class="badge white {{ request.ADMIN_COLOR_THEME }}-text">{{ app.models|length }}</span></a>
+                            <div class="collection collection-md">
+                                <a href="{{ app.app_url }}" class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text center">{{ app.app_label|capfirst }}</a>
                                    {% for model in app.models %}
                                         <a href="{{ model.admin_url }}">
                                             <div class="col l3 m6 s12">
                                                 <div title=" {{ model.name }}" class="tooltip card hoverable {% cycle 'cyan' 'amber' 'green' 'pink' 'teal' 'red' 'light-blue' 'purple' 'indigo' 'blue-grey' as rowcolors %}">
                                                     <div class="card-content white-text center-align">
-                                                        <p class="card-title no-padding">{{ app.app_label|cal_total:model.object_name }}</p>
-                                                        <p class="no-padding truncate">{{ model.name }}</p>
+                                                        <i class="mdi {% dashboard_icon model.object_name %} white-text mdi-4x"></i>
+                                                        <p class="no-padding truncate">{{ model.name }} 
+                                                        <span class="badge white">{% list_count app.app_label model.object_name %}</span></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,7 +111,11 @@
                             </li>
                         {% endfor %}
                     </ul>
-                  
+                    <div class="col l12 s12 m12 ">
+                        <div class="row">
+                            <canvas id="doughnut"></canvas>
+                        </div>
+                    </div>
                 </div>
                 </div>
             </li>
@@ -159,4 +163,52 @@
             </div>
         </li>
     </ul>
+{% endblock %}
+{% block extrajs %}
+    {% if available_apps %}
+        {% calc_visitors as calc_visitor %}
+        <script type="text/javascript" src="{% static 'admin/js/packages/graph/Chart.bundle.js' %}"></script>
+        <script type="text/javascript">
+            var config = {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [
+                            {{ calc_visitor.mobile }},
+                            {{ calc_visitor.tablet }},
+                            {{ calc_visitor.pc }},
+                            {{ calc_visitor.unknown }}
+                        ],
+                        backgroundColor: [
+                            "#f44336",
+                            "#9c27b0",
+                            "#3f51b5",
+                            "#2196f3"
+                        ],
+                        label: 'Dataset 1'
+                    }
+                    ],
+                    labels: ['Mobile', 'Tablet', 'PC', 'Other']
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'User login details'
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            };
+            window.onload = function () {
+                var ctx = document.getElementById("doughnut").getContext("2d");
+                window.myDoughnut = new Chart(ctx, config);
+            };
+        </script>
+    {% endif %}
 {% endblock %}

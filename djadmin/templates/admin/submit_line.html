@@ -1,19 +1,24 @@
 {% load i18n admin_urls custom %}
 {% admin_color_theme as ADMIN_COLOR_THEME %}
 <div class="row">
-<div class="col s12">
-{% if show_save %}<button type="submit" value="{% trans 'Save' %}" class="default btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" name="_save" >{% trans 'Save' %}</button>{% endif %}
+<div class="col s8 right">
+{% if show_save %}<button type="submit" value="{% trans 'Save' %}" class="submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" name="_save" >{% trans 'Save' %}</button>{% endif %}
 {% if show_delete_link %}
     {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
-    <a href="{% add_preserved_filters delete_url %}" class="deletelink-box deletelink red btn waves-effect waves-light">{% trans "Delete" %}</a>
+    <a href="{% add_preserved_filters delete_url %}" class="submit_pad deletelink-box deletelink red btn waves-effect waves-light">{% trans "Delete" %}</a>
 {% endif %}
-</div>
-</div>
-<div class="row">
-<div class="col s12">
-{% if show_save_as_new %}<button type="submit" class="submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" value="{% trans 'Save as new' %}" name="_saveasnew" >{% trans 'Save as new' %}</button>{% endif %}
-{% if show_save_and_add_another %}<button type="submit" class="submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" value="{% trans 'Save and add another' %}" name="_addanother" >{% trans 'Save and add another' %}</button>{% endif %}
-{% if show_save_and_continue %}<button type="submit" class=" submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" value="{% trans 'Save and continue editing' %}" name="_continue" >{% trans 'Save and continue editing' %}</button>{% endif %}
+{% if show_save_as_new %}
+	<button type="submit" class="submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" value="{% trans 'Save as new' %}" name="_saveasnew" >{% trans 'Save as new' %}</button>
+{% endif %}
+
+{% if show_save_and_add_another %}
+	<button type="submit" class="submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" value="{% trans 'Save and add another' %}" name="_addanother" >{% trans 'Save and add another' %}</button>
+{% endif %}
+
+{% if show_save_and_continue %}
+<button type="submit" class=" submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" value="{% trans 'Save and continue editing' %}" name="_continue" >{% trans 'Save and continue editing' %}</button>
+{% endif %}
+
 {% block djadmin_extra_button %}
     {% for button in djadmin_change_form_button.link %}
     <a href="{{ button.href }} "

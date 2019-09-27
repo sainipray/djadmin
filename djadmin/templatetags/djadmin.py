@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.admin.templatetags.admin_list import (result_headers,
                                                           result_hidden_fields,
                                                           results)
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import Library
 
 from .base import AdminReadonlyField, Inline
@@ -31,7 +31,7 @@ def get_admin_site():
 site = get_admin_site()
 
 
-@register.assignment_tag
+@register.simple_tag
 def fieldset_layout(adminform, inline_admin_formsets):
     layout = getattr(adminform.model_admin, 'layout', None)
     if layout is not None:
@@ -163,3 +163,17 @@ def result_sortable_list(cl):
             'result_headers': headers,
             'num_sorted_fields': num_sorted_fields,
             'results': list(results(cl))}
+
+@register.simple_tag
+def list_count(app_label, model_name):
+    from django.apps import apps
+    Model = apps.get_model(app_label=app_label, model_name=model_name)
+    return Model.objects.count()
+
+@register.simple_tag
+def dashboard_icon(model_name):
+    if hasattr(settings, 'DASHBOARD_ICONS'):
+        icon =  settings.DASHBOARD_ICONS.get(model_name)
+        if icon:
+            return icon
+    return "mdi-format-align-center"

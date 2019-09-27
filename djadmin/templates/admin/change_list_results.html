@@ -33,7 +33,7 @@
        </span>{% endif %}</div>
    <div class="clear"></div>
 </th>{% endfor %}
-<td class="field-delete white-text tooltip center" title="Delete"><i class="mdi-navigation-cancel small"></i></td>
+<td class="white-text tooltip center" title="{% trans 'Actions' %}" colspan="3"><i class="mdi-navigation-cancel small"></i></td>
 </tr>
 </thead>
 <tbody id="sortable">
@@ -68,6 +68,7 @@
             {{ item }}
         {% endif %}
     {% endfor %}
+<td class="field-edit tooltip center" title="Edit this"><i class="mdi-editor-mode-edit small"></i></td>
 <td class="field-delete tooltip center" title="Delete this"><i class="mdi-action-delete small"></i></td>
 </tr>
 {% endfor %}

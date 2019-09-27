@@ -7,7 +7,7 @@ import subprocess
 import pip
 from django.contrib.admin.sites import AdminSite
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _

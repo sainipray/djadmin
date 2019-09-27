@@ -1,0 +1,541 @@
+
+#card-alert button {
+    background: none;
+    border: none;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    font-size: 20px;
+    color: #fff;
+}
+
+#container {
+    margin: 0;
+}
+
+#left-sidebar-nav {
+    position: fixed;
+    width: 100px;
+    left: 180px;
+    z-index: 999;
+    height: auto;
+}
+
+ul.side-nav.leftside-navigation {
+    top: 64px;
+    overflow: hidden;
+
+}
+
+ul.side-nav.leftside-navigation li.user-details {
+    background: url(/static/admin/images/user-bg.jpg) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    margin-bottom: 15px;
+    padding: 15px 0 0 15px;
+}
+
+ul.side-nav.leftside-navigation li {
+    line-height: 44px;
+}
+
+.user-details .row {
+    margin: 0;
+}
+
+ul.side-nav li {
+    padding: 0;
+}
+
+ul.side-nav.leftside-navigation li a {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.bold > a {
+    font-weight: bold;
+}
+
+.side-nav a {
+    line-height: 42px;
+    height: 42px;
+}
+
+#slide-out li a i {
+    line-height: inherit;
+    width: 2rem;
+    font-size: 1.6rem;
+    display: block;
+    float: left;
+    text-align: center;
+    margin-right: 1rem;
+}
+
+ul.side-nav.leftside-navigation ul.collapsible-accordion {
+    background-color: #fff;
+}
+
+ul.side-nav .collapsible-header {
+    margin: 0;
+}
+
+ul.side-nav.leftside-navigation li a {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.side-nav .collapsible-body li a {
+    margin: 0 1rem 0 3rem;
+}
+
+.login #container {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 100px auto;
+}
+
+.margin {
+    margin: 0 !important;
+}
+
+ul.side-nav.leftside-navigation .profile-btn {
+    margin: 0;
+    text-transform: capitalize;
+    padding: 0;
+    text-shadow: 1px 1px 1px #444;
+    font-size: 15px;
+}
+
+.user-roal {
+    color: #fff;
+    margin-top: -16px;
+    font-size: 13px;
+    text-shadow: 1px 1px 1px #444;
+}
+
+ul.side-nav.leftside-navigation li.user-details #profile-dropdown a {
+    padding: 8px 15px;
+}
+
+#slide-out li a i {
+    line-height: inherit;
+    width: 2rem;
+    font-size: 1.6rem;
+    display: block;
+    float: left;
+    text-align: center;
+    margin-right: 1rem;
+}
+
+.more-text {
+    padding: 5px 20px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.collapsible-header:after {
+    font-family: "Material-Design-Icons";
+    content: "\e7c3";
+    float: right;
+    color: #9e9e9e;
+    font-size: 18px;
+}
+
+.collapsible-header.active:after {
+    content: "\e7c1";
+}
+
+.collapsible-header:after {
+    font-family: "Material-Design-Icons";
+    content: "\e7c3";
+    float: right;
+    color: #9e9e9e;
+    font-size: 18px;
+}
+
+.sidebar-padding {
+    margin: 8px 0px;
+}
+
+.ps-scrollbar-y-rail, .ps-scrollbar-y {
+    z-index: 9999;
+    width: 10px !important;
+}
+
+#toolbar .search-wrapper {
+    margin: 0;
+    transition: margin .25s ease;
+    position: relative;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+#toolbar .search-wrapper input#searchbar {
+    display: block;
+    font-size: 16px;
+    font-weight: 300;
+    width: 100%;
+    height: 36px;
+    margin: 0;
+    border: 0;
+    padding: 0px 0px 0px 10px;
+    font-weight: bold;
+}
+
+#toolbar .search-wrapper input#searchbar:focus {
+    box-shadow: none !important;
+}
+
+#toolbar .search-wrapper i {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    line-height: 20px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.module.aligned h5 {
+    font-size: 1.2rem;
+    border-bottom: 2px solid #555;
+    padding-bottom: 0.5rem;
+}
+
+.module.aligned .change-data small.help-block {
+    font-size: 12px;
+    line-height: 16px;
+    display: block;
+}
+
+.module.aligned .change-data label {
+    font-weight: bold !important;
+    font-size: 14px !important;
+    color: black;
+}
+
+.module.aligned .change-data.field-password div {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.errorlist {
+    margin: 0;
+}
+
+.errorlist li {
+    position: relative;
+    top: -1rem;
+    left: 0rem;
+    font-size: 1rem;
+    color: #FF4081;
+}
+
+.related-widget-wrapper {
+    float: none !important;
+        overflow: visible !important;
+}
+
+.selector {
+    width: 100% !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.selector-chosen{
+    padding-left: 2%;
+}
+.selector ul.selector-chooser{
+    display: none;
+}
+
+.selector h2 {
+    margin: 0;
+    color: #fff !important;
+    position: relative;
+    font-size: 1.28rem;
+    line-height: 1.6em;
+    text-align: center;
+    width: 100%;
+    padding: 10px 15px;
+    text-transform: uppercase;
+}
+.selector .selector-available h2 {
+    background: #757575 !important;
+}
+
+.selector select {
+    width: 100% !important;
+    margin-left: auto !important;
+    left: auto;
+    border: 1px solid #ccc;
+    right: auto;
+    display: block;
+}
+a.active.selector-chooseall-shade, a.active.selector-clearall-shade {
+    opacity: 1;
+    cursor: pointer;
+}
+a.selector-chooseall-shade, a.selector-clearall-shade {
+    opacity: 0.2;
+    cursor: default;
+}
+
+.selector .selector-available input {
+    margin-left: 3rem !important;
+    width: calc(100% - 3rem) !important;
+}
+
+.module h5, .module caption, .inline-group h2 {
+    margin: 0.5rem 0 1rem 0;
+    padding: 8px;
+    font-weight: 400;
+    font-size: 20px;
+    text-align: left;
+    background-color: #03a9f4 !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    color: #fff;
+}
+
+.paginator li.active span.this-page{
+    color: #fff !important;
+}
+.sidebar-collapse {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    top: -52px;
+    display: block !important;
+    position: absolute;
+    left: -170px;
+}
+header .brand-logo {
+    margin: 1px 0px;
+    padding: 0px 60px;
+}
+.alert-info {
+  background-color: #0277bd; }
+
+.alert-success {
+  background-color: #43a047; }
+
+.alert-warning {
+  background-color: #ff8f00; }
+
+.alert-error {
+  background-color: #d84315; }
+
+#result_list thead a,#result_list thead span{
+    color: white !important;
+}
+#result_list thead [type="checkbox"].filled-in:not(:checked)+label:after{
+        border: 2px solid #fff !important;
+}
+
+.secondary-content {
+    padding-right: 15px;
+}
+.error{
+    color:red;
+}
+.selector ::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* Track */
+.selector ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+.selector ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #29b6f6;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.selector ::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(255, 0, 0, 0.4);
+}
+
+.nav-wrapper a i.left{
+    margin: 0;
+}.nav-wrapper a span.new.badge{
+    font-size: 15px;
+    padding: 7px;
+}
+#card-visitor .PC {
+background: url(/static/admin/images/pc.png) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size:  contain;
+    padding: 44px 0 0 0px;
+}
+#card-visitor .Mobile {
+background: url(/static/admin/images/mobile.png) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size:  contain;
+    padding: 44px 0 0 0px;
+}
+#card-visitor .Tablet {
+background: url(/static/admin/images/tablet.png) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size:  contain;
+    padding: 44px 0 0 0px;
+}
+#card-visitor .Bot {
+background: url(/static/admin/images/bot.png) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size:  contain;
+    padding: 44px 0 0 0px;
+}
+#card-visitor .Unknown {
+background: url(/static/admin/images/unknown.png) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size:  contain;
+    padding: 44px 0 0 0px;
+}#card-visitor .Touch {
+background: url(/static/admin/images/touch.png) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size:  contain;
+    padding: 44px 0 0 0px;
+}
+#card-models .collection-item .row {
+    margin-bottom: 0;
+}
+small{
+    display:block;
+}
+.c-datepicker{
+    left:85% !important;
+}
+#result_list > tbody > tr.selected{
+   background-color: #c4e2ff !important;
+}
+#result_list > tbody > tr:hover{
+   background-color: #c4e2ff !important;
+}
+.field-delete{
+    cursor: pointer;
+    padding: 5px 5px !important;
+}
+p.errornote{
+   color: red;
+}
+.submit_pad{
+    margin-bottom: 10px;
+}
+
+.tabular-delete {
+    padding: 0px 10px;
+    font-size: 0.7rem;
+    height: calc(100% - 15px);
+    width: 100%
+}
+
+.tabular-delete-td {
+    vertical-align: middle;
+    width: 60px
+}
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 100%;
+  height: 4px;
+  background: #fff;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background-color: #00bcd4;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.pace .pace-activity {
+  position: fixed;
+  top: 0;
+  right: -32px;
+  bottom: 0;
+  left: 0;
+
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+
+  background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.2)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.2)), color-stop(0.75, rgba(255, 255, 255, 0.2)), color-stop(0.75, transparent), to(transparent));
+  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+  background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+  -webkit-background-size: 32px 32px;
+  -moz-background-size: 32px 32px;
+  -o-background-size: 32px 32px;
+  background-size: 32px 32px;
+
+  -webkit-animation: pace-theme-barber-shop-motion 500ms linear infinite;
+  -moz-animation: pace-theme-barber-shop-motion 500ms linear infinite;
+  -ms-animation: pace-theme-barber-shop-motion 500ms linear infinite;
+  -o-animation: pace-theme-barber-shop-motion 500ms linear infinite;
+  animation: pace-theme-barber-shop-motion 500ms linear infinite;
+}
+
+@-webkit-keyframes pace-theme-barber-shop-motion {
+  0% { -webkit-transform: none; transform: none; }
+  100% { -webkit-transform: translate(-32px, 0); transform: translate(-32px, 0); }
+}
+@-moz-keyframes pace-theme-barber-shop-motion {
+  0% { -moz-transform: none; transform: none; }
+  100% { -moz-transform: translate(-32px, 0); transform: translate(-32px, 0); }
+}
+@-o-keyframes pace-theme-barber-shop-motion {
+  0% { -o-transform: none; transform: none; }
+  100% { -o-transform: translate(-32px, 0); transform: translate(-32px, 0); }
+}
+@-ms-keyframes pace-theme-barber-shop-motion {
+  0% { -ms-transform: none; transform: none; }
+  100% { -ms-transform: translate(-32px, 0); transform: translate(-32px, 0); }
+}
+@keyframes pace-theme-barber-shop-motion {
+  0% { transform: none; transform: none; }
+  100% { transform: translate(-32px, 0); transform: translate(-32px, 0); }
+}
