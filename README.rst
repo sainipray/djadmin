@@ -17,41 +17,17 @@ Overview
 ========
   **"NEW UPDATES"**
 
-- Added Django Admin documentation templates
+- Added Django 2.x.x support.
 
 - Fixed Bugs
 
-  **"IN VERSION 1.1.5"**
+- Added Dashboard Tiles and Icon.
 
-- Added Sortable in admin **change list** page.
+- Added edit button on listing.
 
-- Added Language dropdown.
+- Added inlined form action buttons 
 
-- Added Configuration Page in admin (In Development).
-
-- Added Some fields in DjadminModelSettings Model.
-
-- Fixed Bugs
-
-  **"FEATURES ADDED IN VERSION 1.1.3"**
-- Dynamic Django Admin - Admin options like : list_display, list_display_link etc will work dynamic.
-
-- Material Design - Djadmin is based on material design.
-
-- Djadmin Cards -  It will show html design card on "Change list" or "Change form" page according to model.
-
-- Visior - Add visitor model for administrator location on each time login and show graph of login device
-
-- Forget Password Option - Admin can enable or disable forget password option on admin login page
-
-- Theme Color - Change theme color of admin
-
-- Admin Header Title - Change django admin header title
-
-- Image preview or File information on change form if form has Image field or File field
-
-- Added "Next" and "Prev" for change form. It will display when model have 2 or more rows data and model has default django primary key field "id"
-
+- Icon on dashboard per models.
 
 Documentation
 =============
@@ -73,7 +49,7 @@ Documentation
 
    * Add in urls.py ::
 
-      url(r'^admin/', include('djadmin.urls')),
+      path('admin/', include('djadmin.urls')),
 
    * Run 'python manage.py migrate' for make visitor model ::
 
@@ -145,30 +121,30 @@ Documentation
 
         ADMIN_HEADER_TITLE  = 'Djadmin Administrator'
 
+   * Add 'DASHBOARD_ICONS' for models icons.
 
-Demo
-==========
-   * URL : https://djadmin.herokuapp.com/admin/
+   		DASHBOARD_ICONS = {
+		  "MODEL_NAME1": "mdi-car",
+		  "MODEL_NAME2": "mdi-coin",
+		  ......
+		}
 
-   * Username : test1234
-
-   * Password : test1234
 
 Screenshot
 ==========
-.. image:: .screen1.png
+.. image:: .dashboard.png
    :width: 400px
 
 .. image:: .screen2.png
    :width: 400px
 
-.. image:: .screen3.png
+.. image:: .form_button.png
    :width: 400px
 
 .. image:: .screen4.png
    :width: 400px
 
-.. image:: .screen5.png
+.. image:: .listing.png
    :width: 400px
 
 License
