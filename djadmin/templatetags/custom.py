@@ -168,3 +168,10 @@ def foreignkey_field_name(value):
     related_names = value.split('__')
     return " > ".join(related_names).replace('_',' ').title()
 
+@register.simple_tag
+def allowed_dashboard_model(model_name):
+    print(model_name)
+    if djadmin_settings.ALLOW_DASHBOARD_MODEL:
+        if model_name in djadmin_settings.ALLOW_DASHBOARD_MODEL:
+            return True
+    return False

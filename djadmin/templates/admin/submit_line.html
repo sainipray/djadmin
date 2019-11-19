@@ -1,7 +1,7 @@
 {% load i18n admin_urls custom %}
 {% admin_color_theme as ADMIN_COLOR_THEME %}
 <div class="row">
-<div class="col s8 right">
+<div class="col s12 right">
 {% if show_save %}<button type="submit" value="{% trans 'Save' %}" class="submit_pad btn {{ ADMIN_COLOR_THEME }} waves-effect waves-light" name="_save" >{% trans 'Save' %}</button>{% endif %}
 {% if show_delete_link %}
     {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}

@@ -133,27 +133,27 @@
                                             <a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
                                         </li>
                                     {% endif %}
-                                    <li class="li-hover hide-on-large-only"><a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
+                                    <li class="li-hover hide-on-large-only">
+                                        <a class="{{ request.ADMIN_COLOR_THEME }}-text" href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
                                     {% for app in available_apps %}
                                         <div class="divider"></div>
-                                        <li class="li-hover"><a href="{{ app.app_url }}"
-                                                                class="ultra-small {{ request.ADMIN_COLOR_THEME }} white-text margin more-tex center ">{{ app.app_label|capfirst }}</a>
-                                        </li>
+
                                         {% for model in app.models %}
                                             <li class="no-padding">
                                                 <ul class="collapsible collapsible-accordion">
                                                     <li class="bold"><a class="{{ request.ADMIN_COLOR_THEME }}-text truncate collapsible-header waves-effect waves-cyan"><i
-                                                            class="mdi-av-play-arrow"></i>{{ model.object_name }}</a>
+                                                            class="mdi-av-play-arrow"></i>{% trans model.object_name %}</a>
                                                         <div class="collapsible-body">
                                                             <ul>
                                                                 {% if model.admin_url %}
                                                                     <li>
-                                                                        <a href="{{ model.admin_url }}" class="truncate">{% trans 'All' %} {{ model.name }}</a>
+                                                                        <a href="{{ model.admin_url }}" class="truncate">
+                                                                        {% trans 'All' %} {% trans model.name %}</a>
                                                                     </li>
                                                                 {% endif %}
                                                                 {% if model.add_url %}
                                                                     <li>
-                                                                        <a href="{{ model.add_url }}">{% trans 'Add' %} {{ model.name }}</a>
+                                                                        <a href="{{ model.add_url }}">{% trans 'Add' %} {% trans model.name %}</a>
                                                                     </li>
                                                                 {% endif %}
                                                             </ul>
@@ -161,6 +161,7 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                            
                                         {% endfor %}
                                     {% endfor %}
                                 </ul>
@@ -186,7 +187,6 @@
                                                     <div class="row">
                                                         <div class="col s12 m12 l9">
                                                             {% block content %}
-
                                                                 {{ content }}
                                                             {% endblock %}
                                                         </div>

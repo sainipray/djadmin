@@ -25,9 +25,11 @@
                 <div class="collapsible-body">
                     <div class="row">
                         {% for app in available_apps %}
-                            <div class="collection collection-md">
-                                <a href="{{ app.app_url }}" class="collection-item {{ request.ADMIN_COLOR_THEME }} white-text center">{{ app.app_label|capfirst }}</a>
-                                   {% for model in app.models %}
+                            
+                           {% for model in app.models %}
+                                {% allowed_dashboard_model model.object_name as allowed_model %}
+                                {% if allowed_model %}
+                                    <div class="collection collection-md">
                                         <a href="{{ model.admin_url }}">
                                             <div class="col l3 m6 s12">
                                                 <div title=" {{ model.name }}" class="tooltip card hoverable {% cycle 'cyan' 'amber' 'green' 'pink' 'teal' 'red' 'light-blue' 'purple' 'indigo' 'blue-grey' as rowcolors %}">
@@ -39,8 +41,11 @@
                                                 </div>
                                             </div>
                                         </a>
-                                    {% endfor %}
-                            </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            
                         {% endfor %}
                     </div>
                 </div>
