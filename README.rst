@@ -128,6 +128,8 @@ Documentation
 		  "MODEL_NAME2": "mdi-coin",
 		  ......
 		}
+   * Add Dashboard models that need to show on dashboard.
+    `ALLOW_DASHBOARD_MODEL = ['Model1', 'Model2', ..]`
 
 
 Screenshot
