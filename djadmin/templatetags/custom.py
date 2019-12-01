@@ -120,10 +120,17 @@ def get_file_detail(adminform, field):
     field_name = type(field_data).__name__
     try:
         if field_name == 'ImageFieldFile':
+            if not bool(field_data):
+                return {
+                    'type': 'image', 'width': 0, 'height': 0, 'url': '',
+                    'size': 0, 'extension': ''
+                }
             filename, file_extension = os.path.splitext(field_data.url)
             return {'type': 'image', 'width': field_data.width, 'height': field_data.height, 'url': field_data.url,
                     'size': field_data.size, 'extension': file_extension}
         if field_name == 'FieldFile':
+            if not bool(field_data):
+               return {'type': 'file', 'url': '', 'size': 0, 'extension': ''}
             filename, file_extension = os.path.splitext(field_data.url)
             return {'type': 'file', 'url': field_data.url, 'size': field_data.size, 'extension': file_extension}
         return field
