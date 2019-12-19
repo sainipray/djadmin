@@ -18,6 +18,16 @@ Requires jQuery, core.js, and SelectBox.js.
 
     }
 
+    function addEvent(node, eventType, method) {
+        if (node.addEventListener) {
+            node.addEventListener(eventType, method);
+        } else if (node.attachEvent) {
+            node.attachEvent('on' + eventType, method);
+        } else {
+            node['on' + eventType] = method;
+        }
+    };
+
     window.SelectFilter = {
         init: function(field_id, field_name, is_stacked) {
             if (field_id.match(/__prefix__/)) {
