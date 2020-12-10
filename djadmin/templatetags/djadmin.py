@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.admin.templatetags.admin_list import (result_headers,
                                                           result_hidden_fields,
                                                           results)
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import Library
 
 from .base import AdminReadonlyField, Inline
@@ -31,7 +31,7 @@ def get_admin_site():
 site = get_admin_site()
 
 
-@register.assignment_tag
+@register.simple_tag
 def fieldset_layout(adminform, inline_admin_formsets):
     layout = getattr(adminform.model_admin, 'layout', None)
     if layout is not None:

@@ -10,7 +10,7 @@ from django.apps import apps
 from django.conf import settings, global_settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import Resolver404, resolve, reverse, NoReverseMatch
+from django.urls import Resolver404, resolve, reverse, NoReverseMatch
 from django.db.models import Q
 from django.template import TemplateSyntaxError
 from django.templatetags.i18n import GetAvailableLanguagesNode
@@ -25,7 +25,7 @@ register = template.Library()
 CL_VALUE_RE = re.compile('value="([\\d-]+)"')
 
 if django.VERSION >= (1, 9):
-    from django.core.urlresolvers import translate_url
+    from django.urls import translate_url
 else:
     from django.utils.six.moves.urllib.parse import urlsplit, urlunsplit
 
@@ -60,13 +60,13 @@ def cal_total(app_label, model_name):
     return data.objects.all().count()
 
 
-@register.assignment_tag
+@register.simple_tag
 def visitors():
     visitor = Visitor.objects.all().order_by('-visit_datetime')[:10]
     return visitor
 
 
-@register.assignment_tag
+@register.simple_tag
 def calc_visitors():
     visit = Visitor.objects.all()
     pc = visit.filter(device_type="PC").count()
@@ -78,7 +78,7 @@ def calc_visitors():
     return {'pc': pc, 'mobile': mobile, 'tablet': tablet, 'unknown': unknown}
 
 
-@register.assignment_tag
+@register.simple_tag
 def next_prev(model):
     next = None
     prev = None
@@ -92,12 +92,12 @@ def next_prev(model):
     return {'next': next, 'prev': prev}
 
 
-@register.assignment_tag
+@register.simple_tag
 def admin_color_theme():
     return get_admin_color_theme(djadmin_settings.ADMIN_COLOR_THEME)
 
 
-@register.assignment_tag
+@register.simple_tag
 def history_of_app(app_label, user):
     models = ContentType.objects.filter(app_label=app_label).select_related()
     q = Q()
@@ -109,12 +109,12 @@ def history_of_app(app_label, user):
     return log_list
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_site_header():
     return djadmin_settings.ADMIN_HEADER_TITLE
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_file_detail(adminform, field):
     field_data = adminform.form.initial[field]
     field_name = type(field_data).__name__
@@ -153,7 +153,7 @@ def get_user_define_available_languages(parser, token):
     return EmptyNode()
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_pk(model, app_label):
     pk = 0
     try:

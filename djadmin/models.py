@@ -20,7 +20,7 @@ class Visitor(models.Model):
     """
     It will store information about user when logged in using django admin
     """
-    name = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_('User'), null=True)
+    name = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_('User'), null=True, on_delete=models.CASCADE)
     city = models.CharField(_('City'), max_length=255, null=True)
     state = models.CharField(_('State'), max_length=50, null=True)
     country = models.CharField(_('Country'), max_length=50, null=True)
@@ -136,7 +136,8 @@ class DjadminModelSetting(models.Model):
                                        verbose_name=_('Date Hierarchy'),
                                        help_text=_("Set date_hierarchy to the name of a DateField or DateTimeField"
                                                    " in your model, and the change list page will include a date-based"
-                                                   " drilldown navigation by that field."))
+                                                   " drilldown navigation by that field."),
+                                       on_delete=models.CASCADE)
 
     actions_on_top = models.BooleanField(_('Actions on Top'),
                                          default=True,
@@ -168,7 +169,7 @@ class DjadminCard(models.Model):
         (LIST_PAGE, _('LIST PAGE')),
         (FORM_PAGE, _('FORM PAGE')),
     )
-    model = models.ForeignKey(DjadminModelSetting)
+    model = models.ForeignKey(DjadminModelSetting, on_delete=models.CASCADE)
     name = models.CharField(_('Name of Card'), max_length=255)
     html = models.TextField(_('HTML Code'))
     location = models.SmallIntegerField(_('Select Location'),
@@ -192,7 +193,7 @@ class Sortable(models.Model):
     But It will store when admin change any row, Otherwise it will not store default changelist
     row's pk. It also provide reset to sortable from icon in table head tag.
     """
-    model = models.ForeignKey(ContentType, verbose_name=_('Model'))
+    model = models.ForeignKey(ContentType, verbose_name=_('Model'), on_delete=models.CASCADE)
     sort_array = models.TextField(_('Model Sortable Array'))
 
     class Meta:
